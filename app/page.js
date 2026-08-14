@@ -1,5 +1,7 @@
 export default function Home() {
   return (
-    <div>This is Home page.</div>
+    <div className="flex-1 overflow-auto">
+      This is Home page.
+    </div>
   );
 }

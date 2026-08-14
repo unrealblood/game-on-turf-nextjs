@@ -3,7 +3,7 @@ import Header from "./components/header/Header";
 import "./globals.css";
 
 export const metadata = {
-  title: "Game on Turf",
+  title: "GameOnTurf",
   description: "Turf booking website.",
 };
 

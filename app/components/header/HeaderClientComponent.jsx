@@ -3,9 +3,21 @@
 import Link from "next/link";
 import { useState } from "react";
 import LogoutButton from "./LogoutButton";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+import { app } from "@/lib/firebase/app";
 
 export default function HeaderClientComponent() {
     const [isAuthUser, setIsAuthUser] = useState(false);
+
+    const auth = getAuth(app);
+    onAuthStateChanged(auth, (user) => {
+        if(user) {
+            setIsAuthUser(true);
+        }
+        else {
+            setIsAuthUser(false);
+        }
+    });
 
     return (
         <header className="fixed w-full flex justify-between items-center p-4 bg-white/60 backdrop-blur-md border-b border-gray-200">

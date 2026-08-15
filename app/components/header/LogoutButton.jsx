@@ -9,14 +9,45 @@ export default function LogoutButton() {
     const router = useRouter();
     
     async function handleLogout() {
-        setLoading(true);
-        
-        const auth = getAuth(app);
-        await signOut(auth);
+        try {
+            setLoading(true);
+            
+            const auth = getAuth(app);
+            const user = auth.currentUser;
+            const accessToken = await user.getIdToken();
 
-        setLoading(false);
+            const response = await fetch("/api/signout", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${accessToken}`
+                }
+            });
 
-        router.push("/auth/login");
+            const result = await response.json();
+            
+            if(result.error) {
+                setLoading(false);
+
+                throw new Error("Failed to logout the user. Error: " + result.error);
+            }
+
+            if(response.ok) {
+                await signOut(auth);
+
+                setLoading(false);
+
+                router.push("/auth/login");
+            }
+
+            setLoading(false);
+        }
+        catch(error) {
+            throw new Error(error.message);
+        }
+        finally {
+            setLoading(false);
+        }
     }
 
     return (

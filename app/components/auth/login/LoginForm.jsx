@@ -36,12 +36,39 @@ export default function LoginForm() {
         setLoading(true);
         
         const auth = getAuth(app);
-        signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
+        signInWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
             // Signed In
-            const user = userCredential.user;
+            const user = userCredential.user;            
+
             if(user) {
-                setStatusMode("success");
-                setStatus("Successfully logged in.");
+                //Await token generation
+                const accessToken = await user.getIdToken();
+
+                //Proceed with the fetch call using the awaited token
+                const response = await fetch("/api/signin", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${accessToken}`
+                    },
+                    body: JSON.stringify({userId: user.uid})
+                });
+
+                const result = await response.json();
+                
+                if (result.error) {
+                    setStatusMode("error");
+                    setStatus(result.error);
+
+                    return;
+                }
+
+                if(response.ok) {
+                    setStatusMode("success");
+                    setStatus("Login successfull.");
+
+                    router.push("/");
+                }
             }
 
             setLoading(false);

@@ -1,8 +1,9 @@
 "use client";
 
 import { app } from "@/lib/firebase/app";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginForm() {
@@ -11,6 +12,8 @@ export default function LoginForm() {
     const [status, setStatus] = useState("");
     const [statusMode, setStatusMode] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const router = useRouter();
     
     async function handleSubmit(e) {
         e.preventDefault();
@@ -51,6 +54,30 @@ export default function LoginForm() {
         });
     }
 
+    async function handleLoginWithGoogle() {
+        setStatusMode("");
+        setStatus("");
+
+        const provider = new GoogleAuthProvider();
+        const auth = getAuth(app);
+        
+        signInWithPopup(auth, provider)
+        .then((result) => {
+            const user = result.user;
+            if(user) {
+                setStatusMode("success");
+                setStatus("Successfully logged in.");
+
+                router.push("/");
+            }
+        })
+        .catch((error) => {
+            setStatusMode("error");
+            setStatus(error.message);
+            setLoading(false);
+        });
+    }
+
     return (
         <form onSubmit={handleSubmit} className="flex flex-col justify-start items-start gap-6 mt-8 px-8">
             <input type="email" placeholder="Enter your email address" className="border border-gray-200 p-2 rounded-md w-full" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -72,6 +99,11 @@ export default function LoginForm() {
             }
 
             <button type="submit" className={`cursor-pointer ${loading ? `bg-gray-200 text-black` : `bg-green-500 text-white`} w-full px-8 py-2 rounded-md`}>{loading ? "Processing..." : "Login"}</button>
+
+            <button type="button" className="w-full px-8 py-2 rounded-md border border-blue-500 flex justify-center items-center gap-2 cursor-pointer" onClick={handleLoginWithGoogle}>
+                <span className="bi-google" />
+                <span>Login with Google</span>
+            </button>
 
             <div className="text-center w-full text-teal-500">
                 <Link href={"/auth/register"}>Don't have an account. Register here.</Link>

@@ -11,7 +11,7 @@ export default async function HeroSection() {
                 <div className="flex justify-center items-center gap-16">
                     <Link href={"/book-grounds"} className="bg-teal-400 px-12 py-4 rounded-xl text-xl"><span className="font-bold">Book a Ground</span> &gt;</Link>
 
-                    <Link href={"/list-ground"} className="bg-white/20 px-12 py-4 rounded-xl font-bold text-xl">List your Ground</Link>
+                    <Link href={"/list-ground"} className="bg-white/20 px-12 py-4 rounded-xl font-bold text-xl hover:bg-white/30">List your Ground</Link>
                 </div>
             </div>
         </section>

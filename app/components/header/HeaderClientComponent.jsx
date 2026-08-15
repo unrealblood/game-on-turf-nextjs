@@ -5,7 +5,7 @@ import { useState } from "react";
 import LogoutButton from "./LogoutButton";
 
 export default function HeaderClientComponent() {
-    const [isAuthUser, setIsAuthUser] = useState(true);
+    const [isAuthUser, setIsAuthUser] = useState(false);
 
     return (
         <header className="flex justify-between items-center p-4 border-b border-gray-200">

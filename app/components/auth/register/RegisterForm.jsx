@@ -17,7 +17,7 @@ export default function RegisterForm() {
 
             <input type="password" placeholder="Confirm password" className="border border-gray-200 p-2 rounded-md w-full" />
 
-            <button type="submit" className="cursor-pointer bg-green-500 text-white w-full px-8 py-2 rounded-md">Register Team</button>
+            <button type="submit" className="cursor-pointer bg-green-500 text-white w-full px-8 py-2 rounded-md">Register</button>
 
             <div className="text-center w-full text-teal-500">
                 <Link href={"/auth/login"}>Already have an account. Login here.</Link>

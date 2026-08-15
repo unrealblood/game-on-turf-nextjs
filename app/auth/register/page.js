@@ -10,7 +10,7 @@ export default async function Register() {
                             <span className="bi-trophy text-2xl text-teal-500" />
                         </div>
 
-                        <h1 className="text-2xl font-bold">Register your Team</h1>
+                        <h1 className="text-2xl font-bold">Register your Account</h1>
                         <p className="text-gray-500">Join the league and book grounds easily</p>
                     </header>
 

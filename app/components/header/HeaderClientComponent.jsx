@@ -8,7 +8,7 @@ export default function HeaderClientComponent() {
     const [isAuthUser, setIsAuthUser] = useState(false);
 
     return (
-        <header className="flex justify-between items-center p-4 border-b border-gray-200">
+        <header className="fixed w-full flex justify-between items-center p-4 bg-white/60 backdrop-blur-md border-b border-gray-200">
             <Link href={"/"}><h1 className="text-2xl font-bold bg-clip-text text-transparent bg-linear-to-r from-teal-500 to-teal-900">GameOnTurf</h1></Link>
 
             <nav className="flex justify-center items-center gap-4 text-gray-500">

@@ -2,8 +2,8 @@ import RegisterForm from "@/app/components/auth/register/RegisterForm";
 
 export default async function Register() {
     return (
-        <div className="flex-1 overflow-y-auto">
-            <div className="w-[600px] mx-auto flex justify-center items-center mt-8 border border-gray-200 rounded-md p-4">
+        <div className="flex-1 overflow-y-auto mt-16">
+            <div className="w-[600px] mx-auto flex justify-center items-center my-8 border border-gray-200 rounded-md p-4">
                 <div className="w-full">
                     <header className="flex justify-center items-center gap-4 flex-col mt-4">
                         <div className="bg-green-200 text-center p-2 rounded-full w-16">

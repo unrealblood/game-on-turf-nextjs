@@ -60,12 +60,16 @@ export default function LoginForm() {
                     setStatusMode("error");
                     setStatus(result.error);
 
+                    setLoading(false);
+
                     return;
                 }
 
                 if(response.ok) {
                     setStatusMode("success");
                     setStatus("Login successfull.");
+
+                    setLoading(false);
 
                     router.push("/");
                 }
@@ -88,14 +92,43 @@ export default function LoginForm() {
         const auth = getAuth(app);
         
         signInWithPopup(auth, provider)
-        .then((result) => {
+        .then(async (result) => {
             const user = result.user;
             if(user) {
-                setStatusMode("success");
-                setStatus("Successfully logged in.");
+                const accessToken = await user.getIdToken();
 
-                router.push("/");
+                //Proceed with the fetch call using the awaited token
+                const response = await fetch("/api/signin", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${accessToken}`
+                    },
+                    body: JSON.stringify({userId: user.uid})
+                });
+
+                const result = await response.json();
+                
+                if (result.error) {
+                    setStatusMode("error");
+                    setStatus(result.error);
+
+                    setLoading(false);
+
+                    return;
+                }
+
+                if(response.ok) {
+                    setStatusMode("success");
+                    setStatus("Login successfull.");
+
+                    setLoading(false);
+
+                    router.push("/");
+                }
             }
+
+            setLoading(false);
         })
         .catch((error) => {
             setStatusMode("error");

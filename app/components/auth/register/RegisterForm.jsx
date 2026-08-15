@@ -1,8 +1,12 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 
 export default function RegisterForm() {
+    const [status, setStatus] = useState("");
+    const [statusMode, setStatusMode] = useState("");
+
     async function handleSubmit(e) {
         e.preventDefault();
 
@@ -16,6 +20,20 @@ export default function RegisterForm() {
             <input type="password" placeholder="Enter your password" className="border border-gray-200 p-2 rounded-md w-full" />
 
             <input type="password" placeholder="Confirm password" className="border border-gray-200 p-2 rounded-md w-full" />
+
+            {(statusMode === "error")
+            &&
+            <div className="text-red-500 w-full text-center">
+                {status}
+            </div>
+            }
+
+            {(statusMode === "success")
+            &&
+            <div className="text-green-500 w-full text-center">
+                {status}
+            </div>
+            }
 
             <button type="submit" className="cursor-pointer bg-green-500 text-white w-full px-8 py-2 rounded-md">Register</button>
 

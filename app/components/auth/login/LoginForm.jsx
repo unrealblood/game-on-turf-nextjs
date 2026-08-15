@@ -36,7 +36,6 @@ export default function LoginForm() {
         setLoading(true);
         
         const auth = getAuth(app);
-        (auth, email, password)
         signInWithEmailAndPassword(auth, email, password).then((userCredential) => {
             // Signed In
             const user = userCredential.user;

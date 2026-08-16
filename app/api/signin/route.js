@@ -19,34 +19,33 @@ export async function POST(request) {
         // 1. Verify the ID token first
         const decodedToken = await auth.verifyIdToken(idToken);
 
-        if(decodedToken) {
-            // 2. Set session expiration to 7 days
-            const expiresIn = 60 * 60 * 24 * 7 * 1000; 
-
-            // 3. Create the session cookie
-            const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
-
-            // 4. Set the cookie in the Next.js response
-            (await cookies()).set('session', sessionCookie, {
-                maxAge: expiresIn,
-                httpOnly: true,
-                secure: true,
-                path: '/',
-                sameSite: 'lax'
-            });
-            (await cookies()).set("userId", userId, {
-                maxAge: expiresIn,
-                httpOnly: true,
-                secure: true,
-                path: '/',
-                sameSite: 'lax'
-            });
-
-            return NextResponse.json({ status: 'success' }, { status: 200 });
+        if (!decodedToken) {
+            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
-        else {
-            return NextResponse.json({error: "Unauthorized"}, {status: 401});
-        }
+
+        // 2. Set session expiration to 7 days
+        const expiresIn = 60 * 60 * 24 * 7 * 1000; 
+
+        // 3. Create the session cookie
+        const sessionCookie = await auth.createSessionCookie(idToken, { expiresIn });
+
+        // 4. Set the cookie in the Next.js response
+        (await cookies()).set('session', sessionCookie, {
+            maxAge: expiresIn,
+            httpOnly: true,
+            secure: true,
+            path: '/',
+            sameSite: 'lax'
+        });
+        (await cookies()).set("userId", userId, {
+            maxAge: expiresIn,
+            httpOnly: true,
+            secure: true,
+            path: '/',
+            sameSite: 'lax'
+        });
+
+        return NextResponse.json({ status: 'success' }, { status: 200 });
         
     } catch (error) {
         throw new Error('Error creating session cookie: ' + error.message);

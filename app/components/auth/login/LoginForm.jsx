@@ -36,9 +36,10 @@ export default function LoginForm() {
         setLoading(true);
         
         const auth = getAuth(app);
-        signInWithEmailAndPassword(auth, email, password).then(async (userCredential) => {
-            // Signed In
-            const user = userCredential.user;            
+
+        try {
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
+            const user = userCredential.user;
 
             if(user) {
                 //Await token generation
@@ -72,14 +73,15 @@ export default function LoginForm() {
                     return;
                 }
             }
-
-            setLoading(false);
-        })
-        .catch((error) => {
+        }
+        catch(error) {
             setStatusMode("error");
             setStatus(error.message);
             setLoading(false);
-        });
+        }
+        finally {
+            setLoading(false);
+        }
     }
 
     async function handleLoginWithGoogle() {
@@ -89,10 +91,10 @@ export default function LoginForm() {
         const provider = new GoogleAuthProvider();
         const auth = getAuth(app);
         
-        signInWithPopup(auth, provider)
-        .then(async (result) => {
-            const user = result.user;
-            
+        try {
+            const userCredential = await signInWithPopup(auth, provider);
+            const user = userCredential.user;
+
             if(user) {
                 const accessToken = await user.getIdToken();
 
@@ -125,14 +127,15 @@ export default function LoginForm() {
                     return;
                 }
             }
-
-            setLoading(false);
-        })
-        .catch((error) => {
+        }
+        catch(error) {
             setStatusMode("error");
             setStatus(error.message);
             setLoading(false);
-        });
+        }
+        finally {
+            setLoading(false);
+        }
     }
 
     return (

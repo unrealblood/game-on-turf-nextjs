@@ -33,16 +33,12 @@ export async function POST(request) {
         (await cookies()).set('session', sessionCookie, {
             maxAge: expiresIn,
             httpOnly: true,
-            secure: true,
-            path: '/',
-            sameSite: 'lax'
+            secure: true
         });
         (await cookies()).set("userId", userId, {
             maxAge: expiresIn,
             httpOnly: true,
-            secure: true,
-            path: '/',
-            sameSite: 'lax'
+            secure: true
         });
 
         return NextResponse.json({ status: 'success' }, { status: 200 });

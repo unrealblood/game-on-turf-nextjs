@@ -54,17 +54,6 @@ export default function LoginForm() {
                     body: JSON.stringify({userId: user.uid})
                 });
 
-                const result = await response.json();
-                
-                if (result.error) {
-                    setStatusMode("error");
-                    setStatus(result.error);
-
-                    setLoading(false);
-
-                    return;
-                }
-
                 if(response.ok) {
                     setStatusMode("success");
                     setStatus("Login successfull.");
@@ -72,6 +61,15 @@ export default function LoginForm() {
                     setLoading(false);
 
                     router.push("/");
+                }
+                else {
+                    const result = await response.json();
+                    
+                    setStatusMode("error");
+                    setStatus(result.error);
+                    setLoading(false);
+
+                    return;
                 }
             }
 

@@ -24,20 +24,19 @@ export default function LogoutButton() {
                 }
             });
 
-            const result = await response.json();
-            
-            if(result.error) {
-                setLoading(false);
-
-                throw new Error("Failed to logout the user. Error: " + result.error);
-            }
-
             if(response.ok) {
                 await signOut(auth);
 
                 setLoading(false);
 
                 router.push("/auth/login");
+            }
+            else {
+                const result = await response.json();
+            
+                setLoading(false);
+
+                throw new Error("Failed to logout the user. Error: " + result.error);
             }
 
             setLoading(false);

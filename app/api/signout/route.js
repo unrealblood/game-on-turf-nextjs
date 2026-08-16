@@ -30,6 +30,6 @@ export async function POST(request) {
 
     return NextResponse.json({ status: 'success' }, { status: 200 });
   } catch (error) {
-    throw new Error('Error deleting session cookie: ' + error.message);
+    return NextResponse.json({ error: error.message });
   }
 }

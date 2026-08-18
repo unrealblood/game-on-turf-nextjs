@@ -2,7 +2,6 @@
 
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function LoginForm() {
@@ -11,8 +10,6 @@ export default function LoginForm() {
     const [status, setStatus] = useState("");
     const [statusMode, setStatusMode] = useState("");
     const [loading, setLoading] = useState(false);
-
-    const router = useRouter();
     
     async function handleSubmit(e) {
         e.preventDefault();
@@ -47,7 +44,7 @@ export default function LoginForm() {
             setStatusMode("success");
             setStatus("Login successfull");
 
-            router.push("/");
+            document.location.href = "/";
         }
         catch(error) {
             setStatusMode("error");

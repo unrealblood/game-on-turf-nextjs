@@ -2,8 +2,6 @@
 
 import Link from "next/link";
 import { useState } from "react";
-import { createUserWithEmailAndPassword, getAuth } from "firebase/auth";
-import { app } from "@/lib/firebase/app";
 
 export default function RegisterForm() {
     const [email, setEmail] = useState("");
@@ -44,24 +42,6 @@ export default function RegisterForm() {
         }
 
         setLoading(true);
-
-        const auth = getAuth(app);
-        createUserWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            // Signed up 
-            const user = userCredential.user;
-            if(user) {
-                setStatusMode("success");
-                setStatus("Account registered successfully. You may now login.");
-            }
-
-            setLoading(false);
-        })
-        .catch((error) => {
-            setStatusMode("error");
-            setStatus(error.message);
-            setLoading(false);
-        });
     }
 
     return (

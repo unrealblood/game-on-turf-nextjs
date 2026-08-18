@@ -1,7 +1,5 @@
 "use client";
 
-import { app } from "@/lib/firebase/app";
-import { getAuth, GoogleAuthProvider, signInWithEmailAndPassword, signInWithPopup } from "firebase/auth";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -34,45 +32,9 @@ export default function LoginForm() {
         }
 
         setLoading(true);
-        
-        const auth = getAuth(app);
 
         try {
-            const userCredential = await signInWithEmailAndPassword(auth, email, password);
-            const user = userCredential.user;
-
-            if(user) {
-                //Await token generation
-                const accessToken = await user.getIdToken();
-
-                //Proceed with the fetch call using the awaited token
-                const response = await fetch("/api/signin", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${accessToken}`
-                    },
-                    body: JSON.stringify({userId: user.uid})
-                });
-
-                if(response.ok) {
-                    setStatusMode("success");
-                    setStatus("Login successfull.");
-
-                    setLoading(false);
-
-                    router.push("/");
-                }
-                else {
-                    const result = await response.json();
-                    
-                    setStatusMode("error");
-                    setStatus(result.error);
-                    setLoading(false);
-
-                    return;
-                }
-            }
+            
         }
         catch(error) {
             setStatusMode("error");
@@ -87,46 +49,9 @@ export default function LoginForm() {
     async function handleLoginWithGoogle() {
         setStatusMode("");
         setStatus("");
-
-        const provider = new GoogleAuthProvider();
-        const auth = getAuth(app);
         
         try {
-            const userCredential = await signInWithPopup(auth, provider);
-            const user = userCredential.user;
-
-            if(user) {
-                const accessToken = await user.getIdToken();
-
-                //Proceed with the fetch call using the awaited token
-                const response = await fetch("/api/signin", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${accessToken}`
-                    },
-                    body: JSON.stringify({userId: user.uid})
-                });
-
-                if(response.ok) {
-                    setStatusMode("success");
-                    setStatus("Login successfull.");
-
-                    setLoading(false);
-
-                    router.push("/");
-                }
-                else {
-                    const result = await response.json();
-
-                    setStatusMode("error");
-                    setStatus(result.error);
-
-                    setLoading(false);
-
-                    return;
-                }
-            }
+            
         }
         catch(error) {
             setStatusMode("error");

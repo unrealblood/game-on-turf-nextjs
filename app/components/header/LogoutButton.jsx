@@ -1,16 +1,26 @@
+import { createClient } from "@/lib/supabase/client";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function LogoutButton() {
+export default function LogoutButton({setUser}) {
     const [loading, setLoading] = useState(false);
-
-    const router = useRouter();
     
+    const router = useRouter();
+
     async function handleLogout() {
         setLoading(true);
 
         try {
+            const supabase = createClient();
+            const { error } = await supabase.auth.signOut();
+
+            if(error) {
+                console.log(error);
+                return;
+            }
             
+            setUser(null);
+            router.push("/auth/login");
         }
         catch(error) {
             throw new Error(error.message);

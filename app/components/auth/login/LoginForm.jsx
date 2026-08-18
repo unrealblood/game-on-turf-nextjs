@@ -1,5 +1,6 @@
 "use client";
 
+import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -34,12 +35,23 @@ export default function LoginForm() {
         setLoading(true);
 
         try {
-            
+            const supabase = createClient();
+            const { error } = await supabase.auth.signInWithPassword({email, password});
+
+            if(error) {
+                setStatusMode("error");
+                setStatus(error.message);
+                return;
+            }
+
+            setStatusMode("success");
+            setStatus("Login successfull");
+
+            router.push("/");
         }
         catch(error) {
             setStatusMode("error");
             setStatus(error.message);
-            setLoading(false);
         }
         finally {
             setLoading(false);
@@ -51,12 +63,11 @@ export default function LoginForm() {
         setStatus("");
         
         try {
-            
+
         }
         catch(error) {
             setStatusMode("error");
             setStatus(error.message);
-            setLoading(false);
         }
         finally {
             setLoading(false);

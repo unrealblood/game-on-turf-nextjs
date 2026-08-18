@@ -1,11 +1,24 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import LogoutButton from "./LogoutButton";
+import { createClient } from "@/lib/supabase/client";
 
 export default function HeaderClientComponent() {
-    const [isAuthUser, setIsAuthUser] = useState(false);
+    const [user, setUser] = useState(null);
+
+    const supabase = createClient();
+
+    useEffect(() => {
+        const { data: listener } = supabase.auth.onAuthStateChange((event, session) => {
+            setUser(session?.user ?? null);
+        });
+
+        return () => {
+            listener.subscription.unsubscribe();
+        }
+    }, [supabase]);
 
     return (
         <header className="fixed w-full flex justify-between items-center p-4 bg-white/60 backdrop-blur-md border-b border-gray-200">
@@ -17,11 +30,11 @@ export default function HeaderClientComponent() {
                 <Link href={"/list-ground"}>List Ground</Link>
             </nav>
 
-            {isAuthUser
+            {(user !== null)
             ?
             <div className="flex justify-center items-center gap-4">
                 <h2 className="text-gray-500">Demo User</h2>
-                <LogoutButton />
+                <LogoutButton setUser={setUser} />
             </div>
             :
             <Link href={"/auth/login"} className="px-4 py-2 bg-gray-800 text-white rounded-md">Login / Register</Link>

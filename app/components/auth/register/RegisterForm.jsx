@@ -1,5 +1,6 @@
 "use client";
 
+import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
 import { useState } from "react";
 
@@ -42,6 +43,27 @@ export default function RegisterForm() {
         }
 
         setLoading(true);
+
+        try {
+            const supabase = createClient();
+            const { error } = await supabase.auth.signUp({email, password});
+
+            if(error) {
+                setStatusMode("error");
+                setStatus(error.message);
+                return;
+            }
+
+            setStatusMode("success");
+            setStatus("Registration successfull. You may now login.");
+        }
+        catch(error) {
+            setStatusMode("error");
+            setStatus(error.message);
+        }
+        finally {
+            setLoading(false);
+        }
     }
 
     return (

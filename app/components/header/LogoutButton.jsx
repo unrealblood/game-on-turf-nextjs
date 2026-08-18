@@ -28,6 +28,6 @@ export default function LogoutButton({setUser}) {
     }
 
     return (
-        <button type="button" className={`${loading ? `bg-gray-200 text-black`: `bg-red-500 text-white`} px-4 py-2 rounded-md cursor-pointer`} onClick={handleLogout}>{loading ? "Logout..." : "Logout"}</button>
+        <button type="button" className={`${loading ? `bg-gray-200 text-black`: `bg-red-500 text-white`} px-4 py-2 rounded-md cursor-pointer`} onClick={handleLogout} disabled={loading}>{loading ? "Logout..." : "Logout"}</button>
     );
 }

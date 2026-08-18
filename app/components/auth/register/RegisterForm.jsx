@@ -88,7 +88,7 @@ export default function RegisterForm() {
             </div>
             }
 
-            <button type="submit" className={`cursor-pointer ${loading ? `bg-gray-200 text-black` : `bg-green-500 text-white`} w-full px-8 py-2 rounded-md`}>{loading ? "Processing..." : "Register"}</button>
+            <button type="submit" className={`cursor-pointer ${loading ? `bg-gray-200 text-black` : `bg-green-500 text-white`} w-full px-8 py-2 rounded-md`} disabled={loading}>{loading ? "Processing..." : "Register"}</button>
 
             <div className="text-center w-full text-teal-500">
                 <Link href={"/auth/login"}>Already have an account. Login here.</Link>

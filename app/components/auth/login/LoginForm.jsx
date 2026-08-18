@@ -93,7 +93,7 @@ export default function LoginForm() {
 
             <button type="submit" className={`cursor-pointer ${loading ? `bg-gray-200 text-black` : `bg-green-500 text-white`} w-full px-8 py-2 rounded-md`}>{loading ? "Processing..." : "Login"}</button>
 
-            <button type="button" className="w-full px-8 py-2 rounded-md border border-blue-500 flex justify-center items-center gap-2 cursor-pointer" onClick={handleLoginWithGoogle}>
+            <button type="button" className="w-full px-8 py-2 rounded-md border border-blue-500 flex justify-center items-center gap-2 cursor-pointer" onClick={handleLoginWithGoogle} disabled={loading}>
                 <span className="bi-google" />
                 <span>Login with Google</span>
             </button>

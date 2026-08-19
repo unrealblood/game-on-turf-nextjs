@@ -1,5 +1,6 @@
 "use client";
 
+import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
 
 export default function ListGroundForm() {
@@ -10,10 +11,10 @@ export default function ListGroundForm() {
     const [length, setLength] = useState(0);
     const [width, setWidth] = useState(0);
     const [feePerPerson, setFeePerPerson] = useState(0);
-    const [feePerHour, setFeePerHour] = useState(0);
     const [imageUrl, setImageUrl] = useState("");
     const [status, setStatus] = useState("");
     const [statusMode, setStatusMode] = useState("");
+    const [loading, setLoading] = useState(false);
 
     function handleSportClick(sport) {
         setSelectedSports(prev => prev.includes(sport) ? prev.filter(s => s !== sport) : [...prev, sport]);
@@ -55,16 +56,35 @@ export default function ListGroundForm() {
             return;
         }
 
-        if(!feePerHour || feePerHour <= 0) {
-            setStatusMode("error");
-            setStatus("Please enter correct fee per hour in rupees");
-            return;
-        }
-
         if(selectedSports.length <= 0) {
             setStatusMode("error");
             setStatus("Please select at least one supported sports");
             return;
+        }
+
+        try {
+            setLoading(true);
+
+            const supabase = createClient();
+            const { error } = await supabase.from("grounds").insert([{
+
+            }]);
+
+            if(error) {
+                setStatusMode("error");
+                setStatus(error.message);
+            }
+            else {
+                setStatusMode("success");
+                setStatus("Ground registered successfully");
+            }
+        }
+        catch(error) {
+            setStatusMode("error");
+            setStatus(error.message);
+        }
+        finally {
+            setLoading(false);
         }
     }
 
@@ -97,18 +117,10 @@ export default function ListGroundForm() {
                     </div>
                 </div>
 
-                <div className="w-full flex justify-start items-center gap-6">
-                    <div className="w-full">
-                        <label htmlFor="feePerPersonInput">₹ Fee per person</label>
+                <div className="w-full">
+                    <label htmlFor="feePerPersonInput">₹ Fee per person</label>
                 
-                        <input id="feePerPersonInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" value={feePerPerson || 0} onChange={(e) => setFeePerPerson(e.target.valueAsNumber)} />
-                    </div>
-
-                    <div className="w-full">
-                        <label htmlFor="feePerHourInput">₹ Fee per Hour</label>
-                
-                        <input id="feePerHourInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" value={feePerHour || 0} onChange={(e) => setFeePerHour(e.target.valueAsNumber)} />
-                    </div>
+                    <input id="feePerPersonInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" value={feePerPerson || 0} onChange={(e) => setFeePerPerson(e.target.valueAsNumber)} />
                 </div>
 
                 <div className="w-full">
@@ -144,7 +156,7 @@ export default function ListGroundForm() {
                 }
 
                 <div className="w-full flex justify-center items-center">
-                    <button type="submit" className="bg-gray-900 text-white rounded-md cursor-pointer px-8 py-2">Submit Registration</button>
+                    <button type="submit" disabled={loading} className={`${loading ? `bg-gray-200 text-black`: `bg-gray-900 text-white`} rounded-md cursor-pointer px-8 py-2`}>{loading ? "Processing..." : "Submit Registration"}</button>
                 </div>
             </form>
         </section>

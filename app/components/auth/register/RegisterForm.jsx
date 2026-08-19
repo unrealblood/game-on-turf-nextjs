@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function RegisterForm() {
+    const [name, setName] = useState("");
+    const [phoneNumber, setPhoneNumber] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
@@ -18,9 +20,21 @@ export default function RegisterForm() {
         setStatusMode("");
         setStatus("");
 
+        if(!name || name.trim().length === 0) {
+            setStatusMode("error");
+            setStatus("Please enter your full name");
+            return;
+        }
+
         if(!email || email.trim().length === 0) {
             setStatusMode("error");
             setStatus("Please enter your email address");
+            return;
+        }
+
+        if(!phoneNumber || phoneNumber.trim().length === 0) {
+            setStatusMode("error");
+            setStatus("Please enter your phone number");
             return;
         }
 
@@ -42,20 +56,30 @@ export default function RegisterForm() {
             return;
         }
 
-        setLoading(true);
-
         try {
+            setLoading(true);
+            
             const supabase = createClient();
-            const { error } = await supabase.auth.signUp({email, password});
+            const { data: user, error: signupError } = await supabase.auth.signUp({email, password});
 
-            if(error) {
+            if(signupError) {
                 setStatusMode("error");
-                setStatus(error.message);
+                setStatus(signupError.message);
                 return;
             }
+            else {
+                const { error: insertError } = await supabase.from("users").insert([{id: user?.user?.id, email, phone_number: phoneNumber, name}]);
 
-            setStatusMode("success");
-            setStatus("Registration successfull. You may now login.");
+                if(insertError) {
+                    setStatusMode("error");
+                    setStatus(signupError.message);
+                    return;
+                }
+                else {
+                    setStatusMode("success");
+                    setStatus("Registration successfull. You may now login.");
+                }
+            }
         }
         catch(error) {
             setStatusMode("error");
@@ -68,7 +92,11 @@ export default function RegisterForm() {
 
     return (
         <form onSubmit={handleSubmit} className="flex flex-col justify-start items-start gap-6 mt-8 px-8">
+            <input type="text" placeholder="Enter your full name" className="border border-gray-200 p-2 rounded-md w-full" value={name} onChange={(e) => setName(e.target.value)} />
+
             <input type="email" placeholder="Enter your email address" className="border border-gray-200 p-2 rounded-md w-full" value={email} onChange={(e) => setEmail(e.target.value)} />
+
+            <input type="text" placeholder="Enter your phone number" className="border border-gray-200 p-2 rounded-md w-full" value={phoneNumber} onChange={(e) => setPhoneNumber(e.target.value)} />
 
             <input type="password" placeholder="Enter your password" className="border border-gray-200 p-2 rounded-md w-full" value={password} onChange={(e) => setPassword(e.target.value)} />
 

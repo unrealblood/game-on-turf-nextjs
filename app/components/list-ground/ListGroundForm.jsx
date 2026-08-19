@@ -30,13 +30,13 @@ export default function ListGroundForm() {
                 </div>
 
                 <div className="w-full flex justify-start items-center gap-6">
-                    <div>
+                    <div className="w-full">
                         <label htmlFor="lengthInput">Length (meters)</label>
                     
                         <input id="lengthInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" />
                     </div>
 
-                    <div>
+                    <div className="w-full">
                         <label htmlFor="widthInput">Width (meters)</label>
                     
                         <input id="widthInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" />
@@ -44,13 +44,13 @@ export default function ListGroundForm() {
                 </div>
 
                 <div className="w-full flex justify-start items-center gap-6">
-                    <div>
+                    <div className="w-full">
                         <label htmlFor="feePerPersonInput">Fee per person</label>
                 
                         <input id="feePerPersonInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" />
                     </div>
 
-                    <div>
+                    <div className="w-full">
                         <label htmlFor="feePerHourInput">Fee per Hour</label>
                 
                         <input id="feePerHourInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" />

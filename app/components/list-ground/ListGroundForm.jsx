@@ -12,6 +12,8 @@ export default function ListGroundForm() {
     const [feePerPerson, setFeePerPerson] = useState(0);
     const [feePerHour, setFeePerHour] = useState(0);
     const [imageUrl, setImageUrl] = useState("");
+    const [status, setStatus] = useState("");
+    const [statusMode, setStatusMode] = useState("");
 
     function handleSportClick(sport) {
         setSelectedSports(prev => prev.includes(sport) ? prev.filter(s => s !== sport) : [...prev, sport]);
@@ -19,6 +21,51 @@ export default function ListGroundForm() {
 
     async function handleSubmit(e) {
         e.preventDefault();
+
+        setStatusMode("");
+        setStatus("");
+
+        if(!name || name.trim().length === 0) {
+            setStatusMode("error");
+            setStatus("Please enter ground name");
+            return;
+        }
+
+        if(!location || location.trim().length === 0) {
+            setStatusMode("error");
+            setStatus("Please enter ground full address");
+            return;
+        }
+
+        if(!length || length <= 0) {
+            setStatusMode("error");
+            setStatus("Please enter correct length in meters");
+            return;
+        }
+
+        if(!width || width <= 0) {
+            setStatusMode("error");
+            setStatus("Please enter correct width in meters");
+            return;
+        }
+
+        if(!feePerPerson || feePerPerson <= 0) {
+            setStatusMode("error");
+            setStatus("Please enter correct fee per person in rupees");
+            return;
+        }
+
+        if(!feePerHour || feePerHour <= 0) {
+            setStatusMode("error");
+            setStatus("Please enter correct fee per hour in rupees");
+            return;
+        }
+
+        if(selectedSports.length <= 0) {
+            setStatusMode("error");
+            setStatus("Please select at least one supported sports");
+            return;
+        }
     }
 
     return (
@@ -52,13 +99,13 @@ export default function ListGroundForm() {
 
                 <div className="w-full flex justify-start items-center gap-6">
                     <div className="w-full">
-                        <label htmlFor="feePerPersonInput">Fee per person</label>
+                        <label htmlFor="feePerPersonInput">₹ Fee per person</label>
                 
                         <input id="feePerPersonInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" value={feePerPerson || 0} onChange={(e) => setFeePerPerson(e.target.valueAsNumber)} />
                     </div>
 
                     <div className="w-full">
-                        <label htmlFor="feePerHourInput">Fee per Hour</label>
+                        <label htmlFor="feePerHourInput">₹ Fee per Hour</label>
                 
                         <input id="feePerHourInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" value={feePerHour || 0} onChange={(e) => setFeePerHour(e.target.valueAsNumber)} />
                     </div>
@@ -77,10 +124,24 @@ export default function ListGroundForm() {
                 </div>
 
                 <div className="w-full">
-                    <label htmlFor="imageInput">Image (Optional)</label>
+                    <label htmlFor="imageInput">Image URL (Optional)</label>
                     
                     <input id="imageInput" type="text" placeholder="Enter url of your turf image" className="w-full border border-gray-200 p-2 rounded-md" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
                 </div>
+
+                {(statusMode === "error")
+                &&
+                <div className="text-red-500 w-full text-center">
+                    {status}
+                </div>
+                }
+
+                {(statusMode === "success")
+                &&
+                <div className="text-green-500 w-full text-center">
+                    {status}
+                </div>
+                }
 
                 <div className="w-full flex justify-center items-center">
                     <button type="submit" className="bg-gray-900 text-white rounded-md cursor-pointer px-8 py-2">Submit Registration</button>

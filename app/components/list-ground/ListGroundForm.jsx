@@ -5,6 +5,13 @@ import { useState } from "react";
 export default function ListGroundForm() {
     const [supportedSports] = useState(["Football", "Cricket", "Volleyball", "Basketball", "Swimming", "Tennis", "Badminton"]);
     const [selectedSports, setSelectedSports] = useState([]);
+    const [name, setName] = useState("");
+    const [location, setLocation] = useState("");
+    const [length, setLength] = useState(0);
+    const [width, setWidth] = useState(0);
+    const [feePerPerson, setFeePerPerson] = useState(0);
+    const [feePerHour, setFeePerHour] = useState(0);
+    const [imageUrl, setImageUrl] = useState("");
 
     function handleSportClick(sport) {
         setSelectedSports(prev => prev.includes(sport) ? prev.filter(s => s !== sport) : [...prev, sport]);
@@ -20,26 +27,26 @@ export default function ListGroundForm() {
                 <div className="w-full">
                     <label htmlFor="groundNameInput">Ground / Turf Name</label>
                     
-                    <input id="groundNameInput" type="text" placeholder="Enter Ground/Turf name" className="w-full border border-gray-200 p-2 rounded-md" />
+                    <input id="groundNameInput" type="text" placeholder="Enter Ground/Turf name" className="w-full border border-gray-200 p-2 rounded-md" value={name} onChange={(e) => setName(e.target.value)} />
                 </div>
 
                 <div className="w-full">
                     <label htmlFor="locationInput">Location / Address</label>
                     
-                    <input id="locationInput" type="text" placeholder="Full address of facility" className="w-full border border-gray-200 p-2 rounded-md" />
+                    <input id="locationInput" type="text" placeholder="Full address of facility" className="w-full border border-gray-200 p-2 rounded-md" value={location} onChange={(e) => setLocation(e.target.value)} />
                 </div>
 
                 <div className="w-full flex justify-start items-center gap-6">
                     <div className="w-full">
                         <label htmlFor="lengthInput">Length (meters)</label>
                     
-                        <input id="lengthInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" />
+                        <input id="lengthInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" value={length || 0} onChange={(e) => setLength(e.target.valueAsNumber)} />
                     </div>
 
                     <div className="w-full">
                         <label htmlFor="widthInput">Width (meters)</label>
                     
-                        <input id="widthInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" />
+                        <input id="widthInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" value={width || 0} onChange={(e) => setWidth(e.target.valueAsNumber)} />
                     </div>
                 </div>
 
@@ -47,13 +54,13 @@ export default function ListGroundForm() {
                     <div className="w-full">
                         <label htmlFor="feePerPersonInput">Fee per person</label>
                 
-                        <input id="feePerPersonInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" />
+                        <input id="feePerPersonInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" value={feePerPerson || 0} onChange={(e) => setFeePerPerson(e.target.valueAsNumber)} />
                     </div>
 
                     <div className="w-full">
                         <label htmlFor="feePerHourInput">Fee per Hour</label>
                 
-                        <input id="feePerHourInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" />
+                        <input id="feePerHourInput" type="number" placeholder="0" className="w-full border border-gray-200 p-2 rounded-md" value={feePerHour || 0} onChange={(e) => setFeePerHour(e.target.valueAsNumber)} />
                     </div>
                 </div>
 
@@ -72,7 +79,7 @@ export default function ListGroundForm() {
                 <div className="w-full">
                     <label htmlFor="imageInput">Image (Optional)</label>
                     
-                    <input id="imageInput" type="text" placeholder="Enter url of your turf image" className="w-full border border-gray-200 p-2 rounded-md" />
+                    <input id="imageInput" type="text" placeholder="Enter url of your turf image" className="w-full border border-gray-200 p-2 rounded-md" value={imageUrl} onChange={(e) => setImageUrl(e.target.value)} />
                 </div>
 
                 <div className="w-full flex justify-center items-center">

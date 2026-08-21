@@ -66,15 +66,31 @@ export default function ListGroundForm() {
             setLoading(true);
 
             const supabase = createClient();
-            const { error } = await supabase.from("grounds").insert([{
+            const { data: insertedGroundData, error: groundInsertError } = await supabase.from("grounds").insert([{
+                name, location_address: location, city: "Delhi", country: "India", length_meters: length, width_meters: width, fee_per_person: feePerPerson, image_url: imageUrl
+            }]).select("id").single();
 
-            }]);
-
-            if(error) {
+            if(groundInsertError) {
                 setStatusMode("error");
-                setStatus(error.message);
+                setStatus(groundInsertError.message);
+                return;
             }
             else {
+                const promises = selectedSports.map(async (sport) => {
+                    const { error: sportsInsertError } = await supabase.from("ground_supported_sports").insert([{ground_id: insertedGroundData.id, sport_name: sport}]);
+
+                    if(sportsInsertError) {
+                        setStatusMode("error");
+                        setStatus(sportsInsertError.message);
+                        return;
+                    }
+                    else {
+                        setStatusMode("success");
+                        setStatus("Ground registered successfully");
+                    }
+                });
+                await Promise.all(promises);
+
                 setStatusMode("success");
                 setStatus("Ground registered successfully");
             }

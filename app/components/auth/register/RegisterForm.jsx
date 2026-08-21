@@ -60,7 +60,7 @@ export default function RegisterForm() {
             setLoading(true);
             
             const supabase = createClient();
-            const { data: user, error: signupError } = await supabase.auth.signUp({email, password});
+            const { error: signupError } = await supabase.auth.signUp({email, password});
 
             if(signupError) {
                 setStatusMode("error");
@@ -68,11 +68,11 @@ export default function RegisterForm() {
                 return;
             }
             else {
-                const { error: insertError } = await supabase.from("users").insert([{id: user?.user?.id, email, phone_number: phoneNumber, name}]);
+                const { error: insertError } = await supabase.from("users").insert([{email, phone_number: phoneNumber, name}]);
 
                 if(insertError) {
                     setStatusMode("error");
-                    setStatus(signupError.message);
+                    setStatus(insertError.message);
                     return;
                 }
                 else {

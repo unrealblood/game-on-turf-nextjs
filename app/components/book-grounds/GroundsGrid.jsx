@@ -6,7 +6,6 @@ import { createClient } from "@/lib/supabase/client";
 
 export default function GroundsGrid() {
     const [grounds, setGrounds] = useState([]);
-    const [status, setStatus] = useState("");
     const [loading, setLoading] = useState(true);
 
     async function fetchGrounds() {
@@ -17,15 +16,14 @@ export default function GroundsGrid() {
             const { data, error } = await supabase.from("grounds").select("*");
 
             if(error) {
-                setStatus("Failed to fetch grounds. Error: " + error.message);
-                return;
+                throw new Error("Failed to fetch grounds. Error: " + error.message);
             }
             else {
                 setGrounds(data);
             }
         }
         catch(error) {
-            throw new Error(error.message);
+            throw new Error("Failed to fetch grounds. Error: " + error.message);
         }
         finally {
             setLoading(false);

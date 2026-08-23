@@ -1,7 +1,14 @@
-export default function GroundBookForm() {
+export default function GroundBookForm({groundName, fee_per_person}) {
+    async function handleSubmit(e) {
+        e.preventDefault();
+    }
+
     return (
         <div>
-            <form className="px-4 mb-4 flex flex-col justify-start items-start gap-4">
+            <form onSubmit={handleSubmit} className="px-4 mb-4 flex flex-col justify-start items-start gap-4">
+                <p>Ground Name: {groundName}</p>
+                <p>Fee per person: {fee_per_person}</p>
+
                 <div className="flex justify-start items-start flex-col gap-2 w-full">
                     <label htmlFor="teamNameInput">Team Name</label>
 

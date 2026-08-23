@@ -54,7 +54,7 @@ export default function GroundItem({id, name, fee_per_person, location_address, 
                 <section className="flex justify-between items-start p-2">
                     <div>
                         <h2 className="text-xl font-bold">{name}</h2>
-                        <p className="text-gray-500 mt-2">{location_address}</p>
+                        <p className="text-gray-500 mt-2 text-sm w-60">{location_address}</p>
                     </div>
 
                     <div>

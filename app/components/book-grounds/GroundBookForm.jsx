@@ -15,16 +15,18 @@ export default function GroundBookForm({groundName, fee_per_person}) {
                     <input type="text" id="teamNameInput" className="bg-gray-200 p-2 rounded-md w-full" placeholder="Enter team name" />
                 </div>
 
-                <div className="flex justify-start items-start flex-col gap-2 w-full">
-                    <label htmlFor="playersInput">Players</label>
+                <div className="w-full flex justify-start items-start gap-4">
+                    <div className="flex justify-start items-start flex-col gap-2 w-full">
+                        <label htmlFor="playersInput">Players</label>
 
-                    <input type="number" id="playersInput" className="bg-gray-200 p-2 rounded-md w-full" placeholder="0" />
-                </div>
+                        <input type="number" id="playersInput" className="bg-gray-200 p-2 rounded-md w-full" placeholder="0" />
+                    </div>
 
-                <div className="flex justify-start items-start flex-col gap-2 w-full">
-                    <label htmlFor="dateInput">Booking Date</label>
+                    <div className="flex justify-start items-start flex-col gap-2 w-full">
+                        <label htmlFor="hoursInput">Hours to Book</label>
 
-                    <input type="date" id="dateInput" className="bg-gray-200 p-2 rounded-md" />
+                        <input type="number" id="hoursInput" className="bg-gray-200 p-2 rounded-md w-full" placeholder="0" />
+                    </div>
                 </div>
 
                 <div className="w-full flex justify-start items-start gap-4">
@@ -39,6 +41,12 @@ export default function GroundBookForm({groundName, fee_per_person}) {
 
                         <input type="time" id="endTimeInput" className="bg-gray-200 p-2 rounded-md" />
                     </div>
+                </div>
+
+                <div className="flex justify-start items-start flex-col gap-2 w-full">
+                    <label htmlFor="dateInput">Booking Date</label>
+
+                    <input type="date" id="dateInput" className="bg-gray-200 p-2 rounded-md" />
                 </div>
 
                 <p>Total Amount: 500</p>

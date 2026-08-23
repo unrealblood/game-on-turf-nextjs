@@ -1,9 +1,11 @@
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
+import GroundBookForm from "./GroundBookForm";
 
 export default function GroundItem({id, name, fee_per_person, location_address, rating, length_meters, width_meters}) {
     const [supportedSports, setSupportedSports] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [bookForm, setBookForm] = useState(false);
 
     async function fetchSupportedSports() {
         setLoading(true);
@@ -30,6 +32,10 @@ export default function GroundItem({id, name, fee_per_person, location_address, 
     useEffect(() => {
         fetchSupportedSports();
     }, []);
+
+    function toggleBookForm() {
+        setBookForm(!bookForm);
+    }
 
     return (
         <article className="w-72 h-[470px] bg-gray-100 rounded-md flex flex-col">
@@ -69,9 +75,24 @@ export default function GroundItem({id, name, fee_per_person, location_address, 
                 </section>
 
                 <div className="mt-auto mb-2 mr-4">
-                    <button type="button" className="bg-gray-900 text-white cursor-pointer rounded-md w-full py-2 mx-2">Book Now</button>
+                    <button type="button" className="bg-gray-900 text-white cursor-pointer rounded-md w-full py-2 mx-2" onClick={toggleBookForm}>Book Now</button>
                 </div>
             </div>
+
+            {bookForm
+            &&
+            <div className="fixed inset-0 flex justify-center items-center bg-black/50 z-10">
+                <div className="absolute bg-white text-black w-[450px] h-auto rounded-md">
+                    <section>
+                        <header className="p-4">
+                            <h2 className="text-xl font-bold text-center">Ground Book Form</h2>
+                        </header>
+
+                        <GroundBookForm />
+                    </section>
+                </div>
+            </div>
+            }
         </article>
     );
 }

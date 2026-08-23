@@ -81,7 +81,7 @@ export default function GroundItem({id, name, fee_per_person, location_address, 
 
             {bookForm
             &&
-            <div className="fixed inset-0 flex justify-center items-center bg-black/50 z-10" onClick={toggleBookForm}>
+            <div className="fixed inset-0 flex justify-center items-center bg-black/50 z-20" onClick={toggleBookForm}>
                 <div className="relative bg-white text-black w-[450px] h-auto rounded-md" onClick={(e) => e.stopPropagation()}>
                     <section>
                         <header className="p-4 relative">

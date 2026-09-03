@@ -1,8 +1,8 @@
-export default function BookingDetailsPanel({ground}) {
+export default function BookingDetailsPanel({name}) {
     return (
-        <div className="bg-gray-100">
+        <div className="bg-gray-50">
             <p>This is ground booking details panel.</p>
-            <p>{ground.name}</p>
+            <p>{name}</p>
         </div>
     );
 }

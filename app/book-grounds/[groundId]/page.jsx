@@ -1,5 +1,4 @@
-import BookingDetailsPanel from "@/app/components/book-grounds/BookingDetailsPanel";
-import GroundBookForm from "@/app/components/book-grounds/GroundBookForm";
+import BookGroundClientComponent from "@/app/components/book-grounds/BookGroundClientComponent";
 import Link from "next/link";
 
 export default async function BookGround({params}) {
@@ -13,10 +12,7 @@ export default async function BookGround({params}) {
                 </p>
             </section>
 
-            <section className="flex justify-between px-8 items-start gap-4 mt-8">
-                <GroundBookForm />
-                <BookingDetailsPanel />
-            </section>
+            <BookGroundClientComponent groundId={groundId} />
         </div>
     );
 }

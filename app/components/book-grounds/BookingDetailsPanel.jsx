@@ -29,6 +29,13 @@ export default function BookingDetailsPanel({name, location_address, fee_per_per
 
                         <div className="flex flex-col justify-between items-start gap-4 w-full">
                             <div className="flex justify-between items-start w-full">
+                                <p>Players Count</p>
+                                <p>-</p>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col justify-between items-start gap-4 w-full">
+                            <div className="flex justify-between items-start w-full">
                                 <p>Fee Per Hour</p>
                                 <p>-</p>
                             </div>

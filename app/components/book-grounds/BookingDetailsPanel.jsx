@@ -1,6 +1,6 @@
 export default function BookingDetailsPanel({name, location_address, fee_per_person}) {
     return (
-        <div className="bg-gray-50 w-72 flex flex-col justify-start items-start rounded-t-md">
+        <div className="bg-gray-50 w-72 flex-none flex flex-col justify-start items-start rounded-t-md">
             <header className="bg-radial from-teal-600 to-teal-900 h-[150px] flex justify-center items-center rounded-t-md w-full">
                 <p className="text-white font-bold text-2xl">{name}</p>
             </header>
@@ -22,15 +22,22 @@ export default function BookingDetailsPanel({name, location_address, fee_per_per
 
                         <div className="flex flex-col justify-between items-start gap-4 w-full">
                             <div className="flex justify-between items-start w-full">
+                                <p>Selected Sport</p>
+                                <p>-</p>
+                            </div>
+                        </div>
+
+                        <div className="flex flex-col justify-between items-start gap-4 w-full">
+                            <div className="flex justify-between items-start w-full">
                                 <p>Fee Per Hour</p>
-                                <p>100</p>
+                                <p>-</p>
                             </div>
                         </div>
 
                         <div className="flex flex-col justify-between items-start gap-4 w-full">
                             <div className="flex justify-between items-start w-full">
                                 <p>Selected Hours</p>
-                                <p>3</p>
+                                <p>-</p>
                             </div>
                         </div>
 

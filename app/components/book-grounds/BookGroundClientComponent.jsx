@@ -25,9 +25,9 @@ export default function BookGroundClientComponent({groundId}) {
     }, []);
 
     return (
-        <section className="flex justify-center px-8 items-start gap-8 mt-8">
-            <GroundBookForm {...ground} />
-            <BookingDetailsPanel {...ground} />
+        <section className="flex justify-start px-8 items-start gap-8 mt-8">
+            <GroundBookForm {...ground} groundId={groundId} />
+            <BookingDetailsPanel {...ground} groundId={groundId} />
         </section>
     );
 }

@@ -1,4 +1,4 @@
-export default function BookingDetailsPanel({name, location_address, fee_per_person}) {
+export default function BookingDetailsPanel({name, location_address, fee_per_person, selectedDate, selectedSport, numberOfPlayers}) {
     return (
         <div className="bg-gray-50 w-72 flex-none flex flex-col justify-start items-start rounded-t-md">
             <header className="bg-radial from-teal-600 to-teal-900 h-[150px] flex justify-center items-center rounded-t-md w-full">
@@ -23,14 +23,14 @@ export default function BookingDetailsPanel({name, location_address, fee_per_per
                         <div className="flex flex-col justify-between items-start gap-4 w-full">
                             <div className="flex justify-between items-start w-full">
                                 <p>Selected Sport</p>
-                                <p>-</p>
+                                <p>{selectedSport}</p>
                             </div>
                         </div>
 
                         <div className="flex flex-col justify-between items-start gap-4 w-full">
                             <div className="flex justify-between items-start w-full">
                                 <p>Players Count</p>
-                                <p>-</p>
+                                <p>{numberOfPlayers.toString() === "NaN" ? 0 : numberOfPlayers}</p>
                             </div>
                         </div>
 

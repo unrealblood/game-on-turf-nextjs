@@ -1,14 +1,9 @@
 import { createClient } from "@/lib/supabase/client";
 import { useEffect, useState } from "react";
 
-export default function GroundBookForm({groundId, name}) {
-    const [sports, setSports] = useState([]);
-    const [timeSlots, setTimeSlots] = useState(["06:00 - 07:00", "07:00 - 08:00", "08:00 - 09:00", "09:00 - 10:00", "10:00 - 11:00", "11:00 - 12:00"]);
-    const [selectedTimeSlots, setSelectedTimeSlots] = useState([]);
-
-    const supabase = createClient();
-
+export default function GroundBookForm({groundId, name, sports, timeSlots, selectedTimeSlots, setSelectedTimeSlots, setSports, teamName, setTeamName, numberOfPlayers, setNumberOfPlayers, selectedSport, setSelectedSport, selectedDate, setSelectedDate}) {
     async function fetchSports() {
+        const supabase = createClient();
         const {data, error} = await supabase.from("ground_supported_sports").select("sport_name").eq("ground_id", groundId);
 
         if(error) {
@@ -40,10 +35,10 @@ export default function GroundBookForm({groundId, name}) {
                             <div className="flex justify-start items-center gap-4 w-full">
                                 <label className="font-bold" htmlFor="sportInput">Select Sport</label>
                                 
-                                <select id="sportInput" className="bg-gray-100 px-4 py-2 rounded-md">
+                                <select id="sportInput" className="bg-gray-100 px-4 py-2 rounded-md" value={selectedSport} onChange={(e) => setSelectedSport(e.target.value)}>
                                     <option value="">-- None ---</option>
                                     {sports.map((sport, index) => (
-                                        <option key={index}>{sport.sport_name}</option>
+                                        <option key={index} value={sport.sport_name}>{sport.sport_name}</option>
                                     ))}
                                 </select>
                             </div>
@@ -51,7 +46,7 @@ export default function GroundBookForm({groundId, name}) {
                             <div className="flex justify-start items-center gap-4 w-full">
                                 <label className="font-bold" htmlFor="dateInput">Select Date</label>
                                 
-                                <input type="date" id="dateInput" className="bg-gray-100 px-4 py-2 rounded-md" />
+                                <input type="date" id="dateInput" className="bg-gray-100 px-4 py-2 rounded-md" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
                             </div>
                         </div>
 
@@ -59,13 +54,13 @@ export default function GroundBookForm({groundId, name}) {
                             <div className="flex justify-start items-center gap-4 w-full">
                                 <label className="font-bold" htmlFor="teamNameInput">Team Name</label>
                                 
-                                <input type="text" id="teamNameInput" className="bg-gray-100 px-4 py-2 rounded-md" placeholder="Enter Team Name" />
+                                <input type="text" id="teamNameInput" className="bg-gray-100 px-4 py-2 rounded-md" placeholder="Enter Team Name" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
                             </div>
 
                             <div className="flex justify-start items-center gap-4 w-full">
                                 <label className="font-bold" htmlFor="playersInput">Number of Players</label>
                                 
-                                <input type="number" id="playersInput" className="bg-gray-100 px-4 py-2 rounded-md" placeholder="0" />
+                                <input type="number" id="playersInput" className="bg-gray-100 px-4 py-2 rounded-md" placeholder="0" value={numberOfPlayers || 0} onChange={(e) => setNumberOfPlayers(e.target.valueAsNumber)} />
                             </div>
                         </div>
 

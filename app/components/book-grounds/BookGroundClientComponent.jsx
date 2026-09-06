@@ -47,6 +47,12 @@ export default function BookGroundClientComponent({groundId}) {
         setSelectedTimeSlots(prev => prev.includes(ts) ? prev.filter(t => t !== ts) : [...prev, ts]);
     }
 
+    function handleSelectSport(sport) {
+        setSelectedSport(sport)
+        setFeePerHour(sports.filter(s => s.sport_name === sport)[0].fee_per_hour);
+        console.log(sports.filter(s => s.sport_name === sport)[0]);
+    }
+
     return (
         <section className="flex justify-start px-8 items-start gap-8 mt-8">
             <div className="bg-gray-50 w-[750px] flex-none">
@@ -61,8 +67,8 @@ export default function BookGroundClientComponent({groundId}) {
                                 <div className="flex justify-start items-center gap-4 w-full">
                                     <label className="font-bold" htmlFor="sportInput">Select Sport</label>
                                     
-                                    <select id="sportInput" className="bg-gray-100 px-4 py-2 rounded-md" value={selectedSport} onChange={(e) => setSelectedSport(e.target.value)}>
-                                        <option value="-">-- None ---</option>
+                                    <select id="sportInput" className="bg-gray-100 px-4 py-2 rounded-md" value={selectedSport} onChange={(e) => handleSelectSport(e.target.value)}>
+                                        <option value="-"> None </option>
                                         {sports.map((sport, index) => (
                                             <option key={index} value={sport.sport_name}>{sport.sport_name}</option>
                                         ))}

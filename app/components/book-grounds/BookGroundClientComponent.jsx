@@ -135,7 +135,7 @@ export default function BookGroundClientComponent({groundId}) {
                             <div className="flex flex-col justify-between items-start gap-4 w-full">
                                 <div className="flex justify-between items-start w-full">
                                     <p>Fee Per Person</p>
-                                    <p>{ground.fee_per_person}</p>
+                                    <p>₹{ground.fee_per_person}</p>
                                 </div>
                             </div>
 
@@ -156,7 +156,7 @@ export default function BookGroundClientComponent({groundId}) {
                             <div className="flex flex-col justify-between items-start gap-4 w-full">
                                 <div className="flex justify-between items-start w-full">
                                     <p>Fee Per Hour</p>
-                                    <p>{feePerHour}</p>
+                                    <p>₹{feePerHour}</p>
                                 </div>
                             </div>
 
@@ -172,7 +172,7 @@ export default function BookGroundClientComponent({groundId}) {
                             <div className="flex flex-col justify-between items-start gap-4 w-full">
                                 <div className="flex justify-between items-start w-full">
                                     <p className="font-bold">Total</p>
-                                    <p className="text-teal-500 font-bold">{totalAmount}</p>
+                                    <p className="text-teal-500 font-bold">₹{totalAmount}</p>
                                 </div>
                             </div>
                         </div>

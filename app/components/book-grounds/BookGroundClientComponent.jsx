@@ -12,7 +12,8 @@ export default function BookGroundClientComponent({groundId}) {
     const [numberOfPlayers, setNumberOfPlayers] = useState(0);
     const [selectedSport, setSelectedSport] = useState("");
     const [selectedDate, setSelectedDate] = useState("");
-    const [feePerHour, setFeePerHour] = useState(0);
+    const [feePerHour, setFeePerHour] = useState(100);
+    const [totalAmount, setTotalAmount] = useState(0);
 
     const supabase = createClient();
 
@@ -24,6 +25,7 @@ export default function BookGroundClientComponent({groundId}) {
         }
         else {
             setGround(data);
+            setTotalAmount(data.fee_per_person);
         }
     }
 
@@ -43,14 +45,20 @@ export default function BookGroundClientComponent({groundId}) {
         fetchSports();
     }, []);
 
+    function handleNumberOfPlayersChange(value) {
+        setNumberOfPlayers(value);
+        setTotalAmount((value * ground.fee_per_person) + (selectedTimeSlots.length * feePerHour));
+    }
+
     function handleSelectTimeSlot(ts) {
         setSelectedTimeSlots(prev => prev.includes(ts) ? prev.filter(t => t !== ts) : [...prev, ts]);
+        
+        setTotalAmount((numberOfPlayers * ground.fee_per_person) + (selectedTimeSlots.includes(ts) ? ((selectedTimeSlots.length - 1) * feePerHour) : ((selectedTimeSlots.length + 1) * feePerHour)));
     }
 
     function handleSelectSport(sport) {
         setSelectedSport(sport)
         setFeePerHour(sports.filter(s => s.sport_name === sport)[0].fee_per_hour);
-        console.log(sports.filter(s => s.sport_name === sport)[0]);
     }
 
     return (
@@ -92,7 +100,7 @@ export default function BookGroundClientComponent({groundId}) {
                                 <div className="flex justify-start items-center gap-4 w-full">
                                     <label className="font-bold" htmlFor="playersInput">Number of Players</label>
                                     
-                                    <input type="number" id="playersInput" className="bg-gray-100 px-4 py-2 rounded-md" placeholder="0" value={numberOfPlayers || 0} onChange={(e) => setNumberOfPlayers(e.target.valueAsNumber)} />
+                                    <input type="number" id="playersInput" className="bg-gray-100 px-4 py-2 rounded-md" placeholder="0" value={numberOfPlayers || 0} onChange={(e) => handleNumberOfPlayersChange(e.target.valueAsNumber)} />
                                 </div>
                             </div>
 
@@ -155,7 +163,7 @@ export default function BookGroundClientComponent({groundId}) {
                             <div className="flex flex-col justify-between items-start gap-4 w-full">
                                 <div className="flex justify-between items-start w-full">
                                     <p>Selected Hours</p>
-                                    <p>-</p>
+                                    <p>{selectedTimeSlots.length}</p>
                                 </div>
                             </div>
 
@@ -164,7 +172,7 @@ export default function BookGroundClientComponent({groundId}) {
                             <div className="flex flex-col justify-between items-start gap-4 w-full">
                                 <div className="flex justify-between items-start w-full">
                                     <p className="font-bold">Total</p>
-                                    <p className="text-teal-500 font-bold">800</p>
+                                    <p className="text-teal-500 font-bold">{totalAmount}</p>
                                 </div>
                             </div>
                         </div>

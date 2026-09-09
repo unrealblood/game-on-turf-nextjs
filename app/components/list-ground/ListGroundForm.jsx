@@ -4,20 +4,47 @@ import { createClient } from "@/lib/supabase/client";
 import { useState } from "react";
 
 export default function ListGroundForm() {
-    const [supportedSports] = useState(["Football", "Cricket", "Volleyball", "Basketball", "Swimming", "Tennis", "Badminton"]);
-    const [selectedSports, setSelectedSports] = useState([]);
+    const [supportedSports, setSupportedSports] = useState([]);
     const [name, setName] = useState("");
     const [location, setLocation] = useState("");
     const [length, setLength] = useState(0);
     const [width, setWidth] = useState(0);
     const [feePerPerson, setFeePerPerson] = useState(0);
+    const [sportName, setSportName] = useState("");
+    const [feePerHour, setFeePerHour] = useState(0);
     const [imageUrl, setImageUrl] = useState("");
     const [status, setStatus] = useState("");
     const [statusMode, setStatusMode] = useState("");
     const [loading, setLoading] = useState(false);
 
-    function handleSportClick(sport) {
-        setSelectedSports(prev => prev.includes(sport) ? prev.filter(s => s !== sport) : [...prev, sport]);
+    function handleAddSport(sport) {
+        if(!sportName || sportName.trim().length === 0) {
+            setStatusMode("error");
+            setStatus("Please enter sport name");
+            return;
+        }
+
+        if(!feePerHour || feePerHour === 0) {
+            setStatusMode("error");
+            setStatus("Please enter fee per hour for the sport");
+            return;
+        }
+
+        const searchedSport = supportedSports.find((s) => s.sportName === sport.sportName);
+        if(searchedSport != null) {
+            setStatusMode("error");
+            setStatus("Sport is already added in Supported Sports");
+            return;
+        }
+
+        setSupportedSports(prev => [...prev, sport]);
+        
+        setSportName("");
+        setFeePerHour(0);
+    }
+
+    function handleRemoveSupportedSport(sport) {
+        setSupportedSports(prev => prev.filter(s => s !== sport));
     }
 
     async function handleSubmit(e) {
@@ -56,9 +83,9 @@ export default function ListGroundForm() {
             return;
         }
 
-        if(selectedSports.length <= 0) {
+        if(supportedSports.length === 0) {
             setStatusMode("error");
-            setStatus("Please select at least one supported sports");
+            setStatus("Please add at least one supported sport.");
             return;
         }
 
@@ -76,8 +103,8 @@ export default function ListGroundForm() {
                 return;
             }
             else {
-                const promises = selectedSports.map(async (sport) => {
-                    const { error: sportsInsertError } = await supabase.from("ground_supported_sports").insert([{ground_id: insertedGroundData.id, sport_name: sport}]);
+                const promises = supportedSports.map(async (sport) => {
+                    const { error: sportsInsertError } = await supabase.from("ground_supported_sports").insert([{ground_id: insertedGroundData.id, sport_name: sport.sportName, fee_per_hour: sport.feePerHour}]);
 
                     if(sportsInsertError) {
                         setStatusMode("error");
@@ -141,12 +168,33 @@ export default function ListGroundForm() {
 
                 <div className="w-full">
                     <p>Supported Sports</p>
+
+                    <div className="flex justify-start items-start w-full gap-6">
+                        <div className="flex justify-start items-start flex-col w-full">
+                            <label htmlFor="sportNameInput">Sport Name</label>
+                            
+                            <input type="text" id="sportNameInput" placeholder="Enter sport name" value={sportName} onChange={(e) => setSportName(e.target.value)} className="w-full border border-gray-200 p-3 rounded-md" />
+                        </div>
+
+                        <div className="flex justify-start items-start flex-col w-full">
+                            <label htmlFor="feePerHourInput">Fee Per Hour</label>
+                            
+                            <input type="number" id="feePerHourInput" placeholder="Enter fee per hour" value={feePerHour || 0} onChange={(e) => setFeePerHour(e.target.valueAsNumber)} className="w-full border border-gray-200 p-3 rounded-md" />
+                        </div>
+
+                        <button type="button" className="w-1/3 bg-teal-500 mt-6 text-white rounded-md cursor-pointer py-3" onClick={() => handleAddSport({sportName, feePerHour})}>Add</button>
+                    </div>
                     
                     <div className="flex justify-start items-center gap-4 flex-wrap mt-4">
                         {supportedSports.map((sport, index) => (
-                            <button key={index} type="button" className={`w-32 px-4 py-2 bg-gray-100 border border-gray-200 rounded-md text-center cursor-pointer ${selectedSports.includes(sport) ? `bg-teal-500 text-white` : `bg-gray-100 text-black`}`} onClick={() => handleSportClick(sport)}>
-                                {sport}
-                            </button>
+                            <div key={index} className="flex justify-between items-center bg-gray-100 border border-gray-200">
+                                <div type="button" className={`w-32 px-4 py-2 rounded-md`}>
+                                    <h2>{sport.sportName}</h2>
+                                    <p>₹ {sport.feePerHour}</p>
+                                </div>
+
+                                <button type="button" className="cursor-pointer bg-red-500 text-white py-6 px-4" onClick={() => handleRemoveSupportedSport(sport)}>X</button>
+                            </div>
                         ))}
                     </div>
                 </div>

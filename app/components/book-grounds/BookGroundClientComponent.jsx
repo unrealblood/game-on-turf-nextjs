@@ -10,9 +10,10 @@ export default function BookGroundClientComponent({groundId}) {
     const [selectedTimeSlots, setSelectedTimeSlots] = useState([]);
     const [teamName, setTeamName] = useState("");
     const [numberOfPlayers, setNumberOfPlayers] = useState(0);
-    const [selectedSport, setSelectedSport] = useState("");
+    const [selectedSport, setSelectedSport] = useState({});
+    const [selectedSportName, setSelectedSportName] = useState("");
     const [selectedDate, setSelectedDate] = useState("");
-    const [feePerHour, setFeePerHour] = useState(100);
+    const [feePerHour, setFeePerHour] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
 
     const supabase = createClient();
@@ -47,18 +48,50 @@ export default function BookGroundClientComponent({groundId}) {
 
     function handleNumberOfPlayersChange(value) {
         setNumberOfPlayers(value);
-        setTotalAmount((value * ground.fee_per_person) + (selectedTimeSlots.length * feePerHour));
+
+        if(selectedSportName == "") {
+            setTotalAmount((value * ground.fee_per_person));
+        }
+        else {
+            const sportFee = selectedSport.fee_per_hour ?? 0;
+            
+            setTotalAmount((value * ground.fee_per_person) + (selectedTimeSlots.length * sportFee));
+        }
     }
 
     function handleSelectTimeSlot(ts) {
         setSelectedTimeSlots(prev => prev.includes(ts) ? prev.filter(t => t !== ts) : [...prev, ts]);
-        
-        setTotalAmount((numberOfPlayers * ground.fee_per_person) + (selectedTimeSlots.includes(ts) ? ((selectedTimeSlots.length - 1) * feePerHour) : ((selectedTimeSlots.length + 1) * feePerHour)));
+
+        if(selectedSportName == "") {
+            return;
+        }
+        else {
+            const sportFee = selectedSport.fee_per_hour ?? 0;
+            
+            setTotalAmount((numberOfPlayers * ground.fee_per_person) + (selectedTimeSlots.includes(ts) ? ((selectedTimeSlots.length - 1) * sportFee) : ((selectedTimeSlots.length + 1) * sportFee)));
+        }
     }
 
-    function handleSelectSport(sport) {
-        setSelectedSport(sport)
-        setFeePerHour(sports.filter(s => s.sport_name === sport)[0].fee_per_hour);
+    function handleSelectSport(sportId) {
+        if(sportId === "") {
+            setSelectedSport({});
+            setSelectedSportName("");
+            setFeePerHour(0);
+
+            return;
+        }
+
+        const sport = sports.find(s => s.id === sportId);
+
+        setSelectedSport(sport);
+        setSelectedSportName(sport.sport_name);
+        setFeePerHour(sport.fee_per_hour);
+
+        if(numberOfPlayers === 0 && selectedTimeSlots.length === 0) {
+            return;
+        }
+        
+        setTotalAmount((numberOfPlayers * ground.fee_per_person) + (selectedTimeSlots.length * selectedSport.fee_per_hour));
     }
 
     return (
@@ -75,10 +108,10 @@ export default function BookGroundClientComponent({groundId}) {
                                 <div className="flex justify-start items-center gap-4 w-full">
                                     <label className="font-bold" htmlFor="sportInput">Select Sport</label>
                                     
-                                    <select id="sportInput" className="bg-gray-100 px-4 py-2 rounded-md" value={selectedSport} onChange={(e) => handleSelectSport(e.target.value)}>
-                                        <option value="-"> None </option>
+                                    <select id="sportInput" className="bg-gray-100 px-4 py-2 rounded-md" value={selectedSport.id} onChange={(e) => handleSelectSport(e.target.value)}>
+                                        <option value={""}> None </option>
                                         {sports.map((sport, index) => (
-                                            <option key={index} value={sport.sport_name}>{sport.sport_name}</option>
+                                            <option key={index} value={sport.id}>{sport.sport_name}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -142,7 +175,7 @@ export default function BookGroundClientComponent({groundId}) {
                             <div className="flex flex-col justify-between items-start gap-4 w-full">
                                 <div className="flex justify-between items-start w-full">
                                     <p>Selected Sport</p>
-                                    <p>{selectedSport}</p>
+                                    <p>{selectedSportName === "" ? "-" : selectedSportName}</p>
                                 </div>
                             </div>
 
@@ -172,7 +205,7 @@ export default function BookGroundClientComponent({groundId}) {
                             <div className="flex flex-col justify-between items-start gap-4 w-full">
                                 <div className="flex justify-between items-start w-full">
                                     <p className="font-bold">Total</p>
-                                    <p className="text-teal-500 font-bold">₹{totalAmount}</p>
+                                    <p className="text-teal-500 font-bold">₹{totalAmount.toString() === "NaN" ? 0 : totalAmount}</p>
                                 </div>
                             </div>
                         </div>

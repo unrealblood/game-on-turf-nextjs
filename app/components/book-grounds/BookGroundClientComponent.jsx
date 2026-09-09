@@ -26,7 +26,6 @@ export default function BookGroundClientComponent({groundId}) {
         }
         else {
             setGround(data);
-            setTotalAmount(data.fee_per_person);
         }
     }
 
@@ -47,10 +46,12 @@ export default function BookGroundClientComponent({groundId}) {
     }, []);
 
     function handleNumberOfPlayersChange(value) {
-        setNumberOfPlayers(value);
+        const nextValue = value;
+        setNumberOfPlayers(nextValue);
 
-        if(selectedSportName == "") {
-            setTotalAmount((value * ground.fee_per_person));
+        if(selectedSportName === "" || selectedTimeSlots.length === 0 || nextValue === 0) {
+            setTotalAmount(0);
+            return;
         }
         else {
             const sportFee = selectedSport.fee_per_hour ?? 0;
@@ -60,9 +61,12 @@ export default function BookGroundClientComponent({groundId}) {
     }
 
     function handleSelectTimeSlot(ts) {
-        setSelectedTimeSlots(prev => prev.includes(ts) ? prev.filter(t => t !== ts) : [...prev, ts]);
+        const nextTimeSlots = selectedTimeSlots.includes(ts) ? selectedTimeSlots.filter(t => t !== ts) : [...selectedTimeSlots, ts];
 
-        if(selectedSportName == "") {
+        setSelectedTimeSlots(nextTimeSlots);
+
+        if(selectedSportName === "" || nextTimeSlots.length === 0) {
+            setTotalAmount(0);
             return;
         }
         else {
@@ -77,6 +81,7 @@ export default function BookGroundClientComponent({groundId}) {
             setSelectedSport({});
             setSelectedSportName("");
             setFeePerHour(0);
+            setTotalAmount(0);
 
             return;
         }
@@ -87,11 +92,12 @@ export default function BookGroundClientComponent({groundId}) {
         setSelectedSportName(sport.sport_name);
         setFeePerHour(sport.fee_per_hour);
 
-        if(numberOfPlayers === 0 && selectedTimeSlots.length === 0) {
+        if(numberOfPlayers === 0 || selectedTimeSlots.length === 0) {
+            setTotalAmount(0);
             return;
         }
         
-        setTotalAmount((numberOfPlayers * ground.fee_per_person) + (selectedTimeSlots.length * selectedSport.fee_per_hour));
+        setTotalAmount((numberOfPlayers * ground.fee_per_person) + (selectedTimeSlots.length * sport.fee_per_hour));
     }
 
     return (

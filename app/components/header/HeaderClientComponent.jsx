@@ -33,7 +33,7 @@ export default function HeaderClientComponent() {
             {(user !== null)
             ?
             <div className="flex justify-center items-center gap-4">
-                <h2 className="text-gray-500">Demo User</h2>
+                <Link href="/dashboard" className="text-gray-500">Dashboard</Link>
                 <LogoutButton setUser={setUser} />
             </div>
             :

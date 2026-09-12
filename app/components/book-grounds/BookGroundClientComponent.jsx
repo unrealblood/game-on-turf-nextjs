@@ -15,6 +15,8 @@ export default function BookGroundClientComponent({groundId}) {
     const [selectedDate, setSelectedDate] = useState("");
     const [feePerHour, setFeePerHour] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
+    const [status, setStatus] = useState("");
+    const [statusMode, setStatusMode] = useState("");
 
     const supabase = createClient();
 
@@ -98,6 +100,67 @@ export default function BookGroundClientComponent({groundId}) {
         }
         
         setTotalAmount((numberOfPlayers * ground.fee_per_person) + (selectedTimeSlots.length * sport.fee_per_hour));
+    }
+
+    async function handleSubmit() {
+        setStatusMode("");
+        setStatus("");
+
+        if(!selectedSportName || selectedSportName.trim().length === 0) {
+            setStatusMode("error");
+            setStatus("Please select sport");
+            return;
+        }
+
+        if(!selectedDate || selectedDate.trim().length === 0) {
+            setStatusMode("error");
+            setStatus("Please select booking date");
+            return;
+        }
+
+        if(!teamName || teamName.trim().length === 0) {
+            setStatusMode("error");
+            setStatus("Please enter your team name");
+            return;
+        }
+
+        if(numberOfPlayers === 0) {
+            setStatusMode("error");
+            setStatus("Please enter number of players");
+            return;
+        }
+
+        if(selectedTimeSlots.length === 0) {
+            setStatusMode("error");
+            setStatus("Please select at least one time slot");
+            return;
+        }
+
+        const { data: userData, error: userFetchError } = await supabase.auth.getUser();
+        if(userFetchError) {
+            setStatusMode("error");
+            setStatus(userFetchError.message);
+            return;
+        }
+        else {
+            const promises = selectedTimeSlots.map(async (timeSlot) => {
+                const { error } = await supabase.from("bookings").insert([{ground_id: groundId, user_id: userData?.user?.id, team_name: teamName, booking_date: selectedDate, start_time: timeSlot.split(" - ")[0], end_time: timeSlot.split(" - ") [1], total_amount: totalAmount ?? 0}]);
+
+                if(error) {
+                    throw new Error("Failed to create booking. Error: " + error.message);
+                }
+            });
+
+            try {
+                await Promise.all(promises);
+
+                setStatusMode("success");
+                setStatus("Successfully booked");
+            }
+            catch(e) {
+                throw new Error("Failed to create booking. Error: " + e.message);
+            }
+        }
     }
 
     return (
@@ -219,7 +282,19 @@ export default function BookGroundClientComponent({groundId}) {
                 </section>
 
                 <div className="mt-auto w-full">
-                    <button type="button" className="cursor-pointer bg-gray-900 text-white py-2 w-full rounded-md p-4"><span className="bi-check-circle mr-2" />Confirm Booking</button>
+                    {statusMode === "error"
+                    &&
+                    <div className="text-red-500 text-center mb-2">
+                        <p>{status}</p>
+                    </div>}
+
+                    {statusMode === "success"
+                    &&
+                    <div className="text-green-500 text-center mb-2">
+                        <p>{status}</p>
+                    </div>}
+
+                    <button type="button" className="cursor-pointer bg-gray-900 text-white py-2 w-full rounded-md p-4" onClick={handleSubmit}><span className="bi-check-circle mr-2" />Confirm Booking</button>
                 </div>
             </div>
         </section>

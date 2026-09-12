@@ -1,6 +1,7 @@
-"use clinet";
+"use client";
 
 import HeroSection from "./HeroSection";
+import RecentBookings from "./RecentBookings";
 
 export default function DashboardClientComponent() {
     const cards = [
@@ -35,6 +36,7 @@ export default function DashboardClientComponent() {
             </header>
 
             <HeroSection cards={cards} />
+            <RecentBookings />
         </div>
     );
 }

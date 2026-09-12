@@ -13,8 +13,7 @@ export default function HeroSection({cards}) {
                             <p className="text-2xl font-bold">{card.value}</p>
                         </div>
                     </div>
-                    )
-                )}
+                ))}
             </div>
         </section>
     );

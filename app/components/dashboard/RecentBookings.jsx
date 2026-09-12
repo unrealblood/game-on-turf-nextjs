@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 
 export default function RecentBookings() {
     const [bookings, setBookings] = useState([]);
-    const [userId, setUserId] = useState("");
 
     async function fetchBookings() {
         const supabase = createClient();
@@ -12,9 +11,6 @@ export default function RecentBookings() {
 
         if(fetchUserError) {
             throw new Error("Failed to fetch user. Error: " + fetchUserError.message);
-        }
-        else {
-            setUserId(userData?.user?.id);
         }
 
         const { data: bookingsData, fetchBookingsError } = await supabase.from("bookings").select("*").eq("user_id", userData?.user?.id);
@@ -40,10 +36,10 @@ export default function RecentBookings() {
             <table className="w-full mt-4">
                 <thead className="bg-gray-100 w-full border-t border-b border-gray-200">
                     <tr>
-                        <th className="text-gray-500 text-lg py-2 px-8">TEAM </th>
-                        <th className="text-gray-500 text-lg py-2 px-12">GROUND</th>
-                        <th className="text-gray-500 text-lg py-2 px-16">DATE & TIME</th>
-                        <th className="text-gray-500 text-lg py-2 px-5">AMOUNT</th>
+                        <th className="text-gray-500 text-lg py-2 pr-8 text-left pl-4">TEAM </th>
+                        <th className="text-gray-500 text-lg py-2 pr-12 text-left pl-4">GROUND</th>
+                        <th className="text-gray-500 text-lg py-2 pr-16 text-left pl-4">DATE & TIME</th>
+                        <th className="text-gray-500 text-lg py-2 pr-5 text-left pl-4">AMOUNT</th>
                     </tr>
                 </thead>
 
@@ -54,8 +50,11 @@ export default function RecentBookings() {
                         <tr key={booking.id}>
                             <td className="text-gray-500 p-4">{booking.team_name}</td>
                             <td className="text-gray-500 p-4">{booking.ground_id}</td>
-                            <td className="text-gray-500 p-4">{booking.start_time}-{booking.end_time}</td>
-                            <td className="text-gray-500 p-4 text-center">{booking.total_amount}</td>
+                            <td className="text-gray-500 p-4">
+                                <p>{booking.booking_date}</p>
+                                <p>{booking.start_time}-{booking.end_time}</p>
+                            </td>
+                            <td className="text-gray-500 p-4">{booking.total_amount}</td>
                         </tr>
                     ))
                     :

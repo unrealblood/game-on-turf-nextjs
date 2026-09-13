@@ -18,13 +18,6 @@ export default function DashboardClientComponent() {
             value: 0,
             bgColor: "bg-teal-200",
             textColor: "text-teal-500"
-        },
-        {
-            icon: "wallet",
-            title: "Total Revenue",
-            value: 0,
-            bgColor: "bg-purple-200",
-            textColor: "text-purple-500"
         }
     ];
 

@@ -1,4 +1,4 @@
-export default function HeroSection({cards}) {
+export default function HeroSection({cards, bookings}) {
     return (
         <section className="mt-8">
             <div className="flex flex-wrap justify-start items-start gap-8">
@@ -10,7 +10,7 @@ export default function HeroSection({cards}) {
                         
                         <div>
                             <p className="text-gray-500">{card.title}</p>
-                            <p className="text-2xl font-bold">{card.value}</p>
+                            <p className="text-2xl font-bold">{bookings.length}</p>
                         </div>
                     </div>
                 ))}

@@ -1,31 +1,4 @@
-import { createClient } from "@/lib/supabase/client";
-import { useEffect, useState } from "react";
-
-export default function RecentBookings() {
-    const [bookings, setBookings] = useState([]);
-
-    async function fetchBookings() {
-        const supabase = createClient();
-
-        const { data: userData, fetchUserError } = await supabase.auth.getUser();
-
-        if(fetchUserError) {
-            throw new Error("Failed to fetch user. Error: " + fetchUserError.message);
-        }
-
-        const { data: bookingsData, fetchBookingsError } = await supabase.from("bookings").select("id, grounds(name), start_time, end_time, booking_date, team_name, total_amount").eq("user_id", userData?.user?.id);
-
-        if(fetchBookingsError) {
-            throw new Error("Failed to fetch bookings. Error: " + fetchBookingsError.message);
-        }
-        else {
-            setBookings(bookingsData);
-        }
-    }
-
-    useEffect(() => {
-        fetchBookings();
-    }, []);
+export default function RecentBookings({bookings}) {
 
     return (
         <section className="bg-gray-50 mt-8 rounded-md">
@@ -46,13 +19,16 @@ export default function RecentBookings() {
                 <tbody>
                     {bookings.length > 0
                     ?
-                    bookings.map((booking) => (
-                        <tr key={booking.id}>
+                    bookings.map((booking, index) => (
+                        <tr key={index}>
                             <td className="text-gray-500 p-4">{booking.team_name}</td>
                             <td className="text-gray-500 p-4">{booking.grounds.name}</td>
                             <td className="text-gray-500 p-4">
                                 <p>{booking.booking_date}</p>
-                                <p>{booking.start_time}-{booking.end_time}</p>
+                                <span>
+                                    {booking.start_times.map((st, index) => (<span key={index}>{st}, </span>))}
+                                    {booking.end_times.map((et, index) => (<span key={index}>{et}, </span>))}
+                                </span>
                             </td>
                             <td className="text-gray-500 p-4">{booking.total_amount}</td>
                         </tr>

@@ -24,6 +24,7 @@ export default function DashboardClientComponent() {
     ];
 
     const [bookings, setBookings] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     async function fetchBookings() {
         const supabase = createClient();
@@ -45,7 +46,15 @@ export default function DashboardClientComponent() {
     }
 
     useEffect(() => {
-        fetchBookings();
+        try {
+            fetchBookings();
+        }
+        catch(error) {
+            throw new Error("Failed to fetch bookings. Error: " + fetchBookingsError.message);
+        }
+        finally {
+            setLoading(false);
+        }
     }, []);
 
     return (
@@ -56,7 +65,7 @@ export default function DashboardClientComponent() {
             </header>
 
             <HeroSection cards={cards} bookings={bookings} />
-            <RecentBookings bookings={bookings} />
+            {loading ? <p className="mt-4">Loading...</p> : <RecentBookings bookings={bookings} />}
         </div>
     );
 }

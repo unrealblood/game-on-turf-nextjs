@@ -1,5 +1,4 @@
 export default function RecentBookings({bookings}) {
-
     return (
         <section className="bg-gray-50 mt-8 rounded-md">
             <header>

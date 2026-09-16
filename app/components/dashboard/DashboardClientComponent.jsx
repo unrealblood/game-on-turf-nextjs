@@ -62,7 +62,7 @@ export default function DashboardClientComponent() {
     return (
         <div className="flex-1 overflow-y-auto mt-20 p-4">
             <header>
-                <h1 className="text-2xl font-bold"><span className="bi-shield text-teal-500" /> User Dashboard</h1>
+                <h1 className="sm:text-2xl text-xl font-bold"><span className="bi-shield text-teal-500" /> User Dashboard</h1>
                 <p className="text-gray-500 mt-2">Monitor bookings, and view analytics.</p>
             </header>
 

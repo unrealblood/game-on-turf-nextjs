@@ -8,10 +8,10 @@ export default function HeroSection({cards, bookings}) {
     }, [bookings]);
 
     return (
-        <section className="mt-8">
-            <div className="flex flex-wrap justify-start items-start gap-8">
+        <section className="sm:mt-8 mt-4">
+            <div className="flex flex-wrap justify-start items-start sm:gap-8 gap-4">
                 {cards.map((card, index) => (
-                    <div key={index} className="bg-gray-100 py-6 px-12 rounded-md flex justify-center items-start gap-2">
+                    <div key={index} className="bg-gray-100 sm:py-6 py-4 sm:px-12 px-6 rounded-md flex justify-center items-start gap-2">
                         <div className={`p-3 ${card.bgColor} rounded-md`}>
                             <span className={`bi-${card.icon} ${card.textColor} text-2xl`} />
                         </div>

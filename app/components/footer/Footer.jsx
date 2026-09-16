@@ -3,11 +3,11 @@ import Link from "next/link";
 export default async function Footer() {
     return (
         <footer className="bg-gray-900 py-8">
-            <div className="flex justify-between items-start text-white px-8 pb-8">
+            <div className="flex flex-col sm:flex-row sm:justify-between justify-start gap-4 sm:gap-0 items-start text-white px-8 pb-8">
                 <div>
                     <Link href={"/"}><h2 className="font-bold text-xl inline">GameOnTurf</h2></Link>
 
-                    <p className="mt-4 text-gray-500 w-96">The premier platform for finding and booking sports facilities. Bringing athletes and ground owners together.</p>
+                    <p className="mt-4 text-gray-500 sm:w-96 w-72">The premier platform for finding and booking sports facilities. Bringing athletes and ground owners together.</p>
                 </div>
 
                 <div>

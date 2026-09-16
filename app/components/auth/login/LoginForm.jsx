@@ -72,7 +72,7 @@ export default function LoginForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col justify-start items-start gap-6 mt-8 px-8">
+        <form onSubmit={handleSubmit} className="flex flex-col justify-start items-start gap-6 mt-8 sm:px-8 px-2">
             <input type="email" placeholder="Enter your email address" className="border border-gray-200 p-2 rounded-md w-full" value={email} onChange={(e) => setEmail(e.target.value)} />
 
             <input type="password" placeholder="Enter your password" className="border border-gray-200 p-2 rounded-md w-full" value={password} onChange={(e) => setPassword(e.target.value)} />
@@ -98,7 +98,7 @@ export default function LoginForm() {
                 <span>Login with Google</span>
             </button>
 
-            <div className="text-center w-full text-teal-500">
+            <div className="text-center w-full text-teal-500 sm:text-base text-sm">
                 <Link href={"/auth/register"}>Don't have an account. Register here.</Link>
             </div>
         </form>

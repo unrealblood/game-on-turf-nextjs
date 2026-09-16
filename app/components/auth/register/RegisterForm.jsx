@@ -91,7 +91,7 @@ export default function RegisterForm() {
     }
 
     return (
-        <form onSubmit={handleSubmit} className="flex flex-col justify-start items-start gap-6 mt-8 px-8">
+        <form onSubmit={handleSubmit} className="flex flex-col justify-start items-start gap-6 mt-8 sm:px-8 px-2">
             <input type="text" placeholder="Enter your full name" className="border border-gray-200 p-2 rounded-md w-full" value={name} onChange={(e) => setName(e.target.value)} />
 
             <input type="email" placeholder="Enter your email address" className="border border-gray-200 p-2 rounded-md w-full" value={email} onChange={(e) => setEmail(e.target.value)} />
@@ -118,7 +118,7 @@ export default function RegisterForm() {
 
             <button type="submit" className={`cursor-pointer ${loading ? `bg-gray-200 text-black` : `bg-green-500 text-white`} w-full px-8 py-2 rounded-md`} disabled={loading}>{loading ? "Processing..." : "Register"}</button>
 
-            <div className="text-center w-full text-teal-500">
+            <div className="text-center w-full text-teal-500 sm:text-base text-sm">
                 <Link href={"/auth/login"}>Already have an account. Login here.</Link>
             </div>
         </form>

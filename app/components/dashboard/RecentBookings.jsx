@@ -29,7 +29,7 @@ export default function RecentBookings({bookings}) {
                                     {booking.end_times.map((et, index) => (<span key={index}>{et}, </span>))}
                                 </span>
                             </td>
-                            <td className="text-gray-500 p-4">{booking.total_amount}</td>
+                            <td className="text-gray-500 p-4">₹{booking.total_amount}</td>
                         </tr>
                     ))
                     :

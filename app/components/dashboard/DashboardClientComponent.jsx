@@ -10,16 +10,16 @@ export default function DashboardClientComponent() {
         {
             icon: "bounding-box",
             title: "Total Grounds",
-            value: 0,
             bgColor: "bg-blue-200",
-            textColor: "text-blue-500"
+            textColor: "text-blue-500",
+            value: 0
         },
         {
             icon: "calendar",
             title: "Total Bookings",
-            value: 0,
             bgColor: "bg-teal-200",
-            textColor: "text-teal-500"
+            textColor: "text-teal-500",
+            value: 0
         }
     ];
 
@@ -47,10 +47,12 @@ export default function DashboardClientComponent() {
 
     useEffect(() => {
         try {
+            setLoading(true);
+
             fetchBookings();
         }
         catch(error) {
-            throw new Error("Failed to fetch bookings. Error: " + fetchBookingsError.message);
+            throw new Error("Failed to fetch bookings. Error: " + error.message);
         }
         finally {
             setLoading(false);

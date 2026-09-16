@@ -1,4 +1,12 @@
+import { useEffect, useState } from "react";
+
 export default function HeroSection({cards, bookings}) {
+    const [totalGrounds, setTotalGrounds] = useState(0);
+
+    useEffect(() => {
+        setTotalGrounds(bookings.filter((booking, index, self) => index === self.findIndex((b) => b.grounds.name === booking.grounds.name)).length);
+    }, [bookings]);
+
     return (
         <section className="mt-8">
             <div className="flex flex-wrap justify-start items-start gap-8">
@@ -10,7 +18,9 @@ export default function HeroSection({cards, bookings}) {
                         
                         <div>
                             <p className="text-gray-500">{card.title}</p>
-                            <p className="text-2xl font-bold">{bookings.length}</p>
+                            {card.title === "Total Grounds" && <p className="text-2xl font-bold">{totalGrounds}</p>}
+
+                            {card.title === "Total Bookings" && <p className="text-2xl font-bold">{bookings.length}</p>}
                         </div>
                     </div>
                 ))}

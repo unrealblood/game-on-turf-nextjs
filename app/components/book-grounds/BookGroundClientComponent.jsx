@@ -17,28 +17,51 @@ export default function BookGroundClientComponent({groundId}) {
     const [totalAmount, setTotalAmount] = useState(0);
     const [status, setStatus] = useState("");
     const [statusMode, setStatusMode] = useState("");
+    const [loadGround, setLoadGround] = useState(true);
+    const [loadSports, setLoadSports] = useState(true);
+    const [loading, setLoading] = useState(false);
 
     const supabase = createClient();
 
     async function fetchGround() {
-        const { data, error } = await supabase.from("grounds").select("*").eq("id", groundId).single();
+        try {
+            setLoadGround(true);
 
-        if(error) {
-            throw new Error("Failed to fetch ground. Error: " + error.message);
+            const { data, error } = await supabase.from("grounds").select("*").eq("id", groundId).single();
+
+            if(error) {
+                throw new Error("Failed to fetch ground. Error: " + error.message);
+            }
+            else {
+                setGround(data);
+            }
         }
-        else {
-            setGround(data);
+        catch(error) {
+            throw new Error(error.message);
+        }
+        finally {
+            setLoadGround(false);
         }
     }
 
     async function fetchSports() {
-        const {data, error} = await supabase.from("ground_supported_sports").select("*").eq("ground_id", groundId);
+        try {
+            setLoadSports(true);
 
-        if(error) {
-            throw new Error("Failed to fetch ground supported sports. Error: " + error.message);
+            const {data, error} = await supabase.from("ground_supported_sports").select("*").eq("ground_id", groundId);
+
+            if(error) {
+                throw new Error("Failed to fetch ground supported sports. Error: " + error.message);
+            }
+            else {
+                setSports(data);
+            }
         }
-        else {
-            setSports(data);
+        catch(error) {
+            throw new Error(error.message);
+        }
+        finally {
+            setLoadSports(false);
         }
     }
 
@@ -103,68 +126,75 @@ export default function BookGroundClientComponent({groundId}) {
     }
 
     async function handleSubmit() {
-        setStatusMode("");
-        setStatus("");
+        try {
+            setLoading(true);
 
-        if(!selectedSportName || selectedSportName.trim().length === 0) {
-            setStatusMode("error");
-            setStatus("Please select sport");
-            return;
-        }
+            setStatusMode("");
+            setStatus("");
 
-        if(!selectedDate || selectedDate.trim().length === 0) {
-            setStatusMode("error");
-            setStatus("Please select booking date");
-            return;
-        }
+            if(!selectedSportName || selectedSportName.trim().length === 0) {
+                setStatusMode("error");
+                setStatus("Please select sport");
+                return;
+            }
 
-        if(!teamName || teamName.trim().length === 0) {
-            setStatusMode("error");
-            setStatus("Please enter your team name");
-            return;
-        }
+            if(!selectedDate || selectedDate.trim().length === 0) {
+                setStatusMode("error");
+                setStatus("Please select booking date");
+                return;
+            }
 
-        if(numberOfPlayers === 0) {
-            setStatusMode("error");
-            setStatus("Please enter number of players");
-            return;
-        }
+            if(!teamName || teamName.trim().length === 0) {
+                setStatusMode("error");
+                setStatus("Please enter your team name");
+                return;
+            }
 
-        if(selectedTimeSlots.length === 0) {
-            setStatusMode("error");
-            setStatus("Please select at least one time slot");
-            return;
-        }
+            if(numberOfPlayers === 0) {
+                setStatusMode("error");
+                setStatus("Please enter number of players");
+                return;
+            }
 
-        const { data: userData, error: userFetchError } = await supabase.auth.getUser();
-        if(userFetchError) {
-            setStatusMode("error");
-            setStatus(userFetchError.message);
-            return;
-        }
-        else {
-            const promises = selectedTimeSlots.map(async (timeSlot) => {
-                const { error } = await supabase.from("bookings").insert([{ground_id: groundId, user_id: userData?.user?.id, team_name: teamName, booking_date: selectedDate, start_time: timeSlot.split(" - ")[0], end_time: timeSlot.split(" - ") [1], total_amount: totalAmount ?? 0}]);
+            if(selectedTimeSlots.length === 0) {
+                setStatusMode("error");
+                setStatus("Please select at least one time slot");
+                return;
+            }
 
-                if(error) {
-                    throw new Error("Failed to create booking. Error: " + error.message);
-                }
-            });
+            const { data: userData, error: userFetchError } = await supabase.auth.getUser();
+            if(userFetchError) {
+                setStatusMode("error");
+                setStatus(userFetchError.message);
+                return;
+            }
+            else {
+                const promises = selectedTimeSlots.map(async (timeSlot) => {
+                    const { error } = await supabase.from("bookings").insert([{ground_id: groundId, user_id: userData?.user?.id, team_name: teamName, booking_date: selectedDate, start_time: timeSlot.split(" - ")[0], end_time: timeSlot.split(" - ") [1], total_amount: totalAmount ?? 0}]);
 
-            try {
+                    if(error) {
+                        throw new Error("Failed to create booking. Error: " + error.message);
+                    }
+                });
+
                 await Promise.all(promises);
 
                 setStatusMode("success");
                 setStatus("Successfully booked");
             }
-            catch(e) {
-                throw new Error("Failed to create booking. Error: " + e.message);
-            }
+        }
+        catch(error) {
+            throw new Error(error.message);
+        }
+        finally {
+            setLoading(false);
         }
     }
 
     return (
         <section className="flex justify-start px-8 items-start gap-8 mt-8">
+            {!loadGround
+            ?
             <div className="bg-gray-50 w-[750px] flex-none">
                 <div className="p-4">
                     <header>
@@ -220,7 +250,12 @@ export default function BookGroundClientComponent({groundId}) {
                     </form>
                 </div>
             </div>
+            :
+            <p>Loading...</p>
+            }
 
+            {!loadSports
+            ?
             <div className="bg-gray-50 w-72 flex-none flex flex-col justify-start items-start rounded-t-md">
                 <header className="bg-radial from-teal-600 to-teal-900 h-[150px] flex justify-center items-center rounded-t-md w-full">
                     <p className="text-white font-bold text-2xl">{ground.name}</p>
@@ -294,9 +329,12 @@ export default function BookGroundClientComponent({groundId}) {
                         <p>{status}</p>
                     </div>}
 
-                    <button type="button" className="cursor-pointer bg-gray-900 text-white py-2 w-full rounded-md p-4" onClick={handleSubmit}><span className="bi-check-circle mr-2" />Confirm Booking</button>
+                    <button type="button" disabled={loading} className={`cursor-pointer ${loading ? "bg-gray-200 text-black" : "bg-gray-900 text-white"} py-2 w-full rounded-md p-4`} onClick={handleSubmit}><span className="bi-check-circle mr-2" />{loading ? "Processing" : "Confirm Booking"}</button>
                 </div>
             </div>
+            :
+            <p>Loading...</p>
+            }
         </section>
     );
 }

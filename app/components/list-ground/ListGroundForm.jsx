@@ -169,7 +169,7 @@ export default function ListGroundForm() {
                 <div className="w-full">
                     <p>Supported Sports</p>
 
-                    <div className="flex justify-start items-start w-full gap-6">
+                    <div className="flex sm:flex-row flex-col justify-start items-start w-full sm:gap-6 gap-2">
                         <div className="flex justify-start items-start flex-col w-full">
                             <label htmlFor="sportNameInput">Sport Name</label>
                             
@@ -182,7 +182,7 @@ export default function ListGroundForm() {
                             <input type="number" id="feePerHourInput" placeholder="Enter fee per hour" value={feePerHour || 0} onChange={(e) => setFeePerHour(e.target.valueAsNumber)} className="w-full border border-gray-200 p-3 rounded-md" />
                         </div>
 
-                        <button type="button" className="w-1/3 bg-teal-500 mt-6 text-white rounded-md cursor-pointer py-3" onClick={() => handleAddSport({sportName, feePerHour})}>Add</button>
+                        <button type="button" className="w-1/3 bg-teal-500 sm:mt-6 mt-2 text-white rounded-md cursor-pointer py-3" onClick={() => handleAddSport({sportName, feePerHour})}>Add</button>
                     </div>
                     
                     <div className="flex justify-start items-center gap-4 flex-wrap mt-4">

@@ -192,19 +192,19 @@ export default function BookGroundClientComponent({groundId}) {
     }
 
     return (
-        <section className="flex justify-start px-8 items-start gap-8 mt-8">
+        <section className="flex sm:flex-row flex-col sm:justify-start sm:items-start justify-center sm:px-8 px-2 items-center flex-wrap flex-nowrap sm:gap-8 gap-4 mt-8">
             {!loadGround
             ?
-            <div className="bg-gray-50 w-[750px] flex-none">
+            <div className="bg-gray-50 sm:w-[750px] w-[280px] flex-none">
                 <div className="p-4">
                     <header>
-                        <h1 className="text-2xl font-bold"><span className="bi-calendar mr-1" /> Book {ground.name} Turf</h1>
+                        <h1 className="sm:text-2xl text-xl font-bold"><span className="bi-calendar mr-1" /> Book {ground.name} Turf</h1>
                     </header>
 
                     <form className="mt-8">
                         <div className="flex flex-col justify-start items-start gap-4">
-                            <div className="flex justify-center items-start gap-8 w-full">
-                                <div className="flex justify-start items-center gap-4 w-full">
+                            <div className="flex sm:flex-row flex-col sm:justify-center items-start justify-start sm:gap-8 gap-4 w-full">
+                                <div className="flex sm:flex-row flex-col justify-start sm:items-center items-start sm:gap-4 gap-2 w-full">
                                     <label className="font-bold" htmlFor="sportInput">Select Sport</label>
                                     
                                     <select id="sportInput" className="bg-gray-100 px-4 py-2 rounded-md" value={selectedSport.id} onChange={(e) => handleSelectSport(e.target.value)}>
@@ -215,21 +215,21 @@ export default function BookGroundClientComponent({groundId}) {
                                     </select>
                                 </div>
 
-                                <div className="flex justify-start items-center gap-4 w-full">
+                                <div className="flex sm:flex-row flex-col justify-start sm:items-center items-start sm:gap-4 gap-2 w-full">
                                     <label className="font-bold" htmlFor="dateInput">Select Date</label>
                                     
                                     <input type="date" id="dateInput" className="bg-gray-100 px-4 py-2 rounded-md" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} />
                                 </div>
                             </div>
 
-                            <div className="flex justify-center items-start gap-8 w-full">
-                                <div className="flex justify-start items-center gap-4 w-full">
+                            <div className="flex sm:justify-center justify-start sm:flex-row flex-col items-start sm:gap-8 gap-4 w-full">
+                                <div className="flex sm:flex-row flex-col justify-start sm:items-center items-start sm:gap-4 gap-2 w-full">
                                     <label className="font-bold" htmlFor="teamNameInput">Team Name</label>
                                     
                                     <input type="text" id="teamNameInput" className="bg-gray-100 px-4 py-2 rounded-md" placeholder="Enter Team Name" value={teamName} onChange={(e) => setTeamName(e.target.value)} />
                                 </div>
 
-                                <div className="flex justify-start items-center gap-4 w-full">
+                                <div className="flex sm:flex-row flex-col justify-start sm:items-center items-start sm:gap-4 gap-2 w-full">
                                     <label className="font-bold" htmlFor="playersInput">Number of Players</label>
                                     
                                     <input type="number" id="playersInput" className="bg-gray-100 px-4 py-2 rounded-md" placeholder="0" value={numberOfPlayers || 0} onChange={(e) => handleNumberOfPlayersChange(e.target.valueAsNumber)} />

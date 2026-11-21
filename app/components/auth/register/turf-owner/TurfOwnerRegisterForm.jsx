@@ -205,7 +205,7 @@ export default function RegisterForm() {
             </div>
 
             <div className="text-center w-full text-teal-500 sm:text-base text-sm">
-                <Link href={"/auth/login"}>Already have an account. Login here.</Link>
+                <Link href={"/auth/login/turf-owner"}>Already have an account. Login here.</Link>
             </div>
         </form>
     );

@@ -1,4 +1,4 @@
-import LoginForm from "@/app/components/auth/login/LoginForm";
+import UserLoginForm from "@/app/components/auth/login/user/UserLoginForm";
 
 export default async function Login() {
     return (
@@ -14,7 +14,7 @@ export default async function Login() {
                     </header>
 
                     {/* Login Form */}
-                    <LoginForm />
+                    <UserLoginForm />
                 </div>
             </div>
         </div>

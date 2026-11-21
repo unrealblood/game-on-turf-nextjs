@@ -1,0 +1,117 @@
+"use client";
+
+import { createClient } from "@/lib/supabase/client";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
+
+export default function UserLoginForm() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [status, setStatus] = useState("");
+    const [statusMode, setStatusMode] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const router = useRouter();
+    
+    async function handleSubmit(e) {
+        e.preventDefault();
+
+        setStatusMode("");
+        setStatus("");
+
+        if(!email || email.trim().length === 0) {
+            setStatusMode("error");
+            setStatus("Please enter your email address");
+            return;
+        }
+
+        if(!password || password.trim().length === 0) {
+            setStatusMode("error");
+            setStatus("Please enter your password");
+            return;
+        }
+
+        setLoading(true);
+
+        /*
+        try {
+            const supabase = createClient();
+            const { error } = await supabase.auth.signInWithPassword({email, password});
+
+            if(error) {
+                setStatusMode("error");
+                setStatus(error.message);
+                return;
+            }
+
+            setStatusMode("success");
+            setStatus("Login successfull");
+
+            document.location.href = "/";
+        }
+        catch(error) {
+            setStatusMode("error");
+            setStatus(error.message);
+        }
+        finally {
+            setLoading(false);
+        }
+        */
+    }
+
+    async function handleLoginWithGoogle() {
+        setStatusMode("");
+        setStatus("");
+        
+        try {
+
+        }
+        catch(error) {
+            setStatusMode("error");
+            setStatus(error.message);
+        }
+        finally {
+            setLoading(false);
+        }
+    }
+
+    return (
+        <form onSubmit={handleSubmit} className="flex flex-col justify-start items-start gap-6 mt-8 sm:px-8 px-2">
+            <input type="email" placeholder="Enter your email address" className="border border-gray-200 p-2 rounded-md w-full" value={email} onChange={(e) => setEmail(e.target.value)} />
+
+            <input type="password" placeholder="Enter your password" className="border border-gray-200 p-2 rounded-md w-full" value={password} onChange={(e) => setPassword(e.target.value)} />
+
+            {(statusMode === "error")
+            &&
+            <div className="text-red-500 w-full text-center">
+                {status}
+            </div>
+            }
+
+            {(statusMode === "success")
+            &&
+            <div className="text-green-500 w-full text-center">
+                {status}
+            </div>
+            }
+
+            <button type="submit" className={`cursor-pointer ${loading ? `bg-gray-200 text-black` : `bg-green-500 text-white`} w-full px-8 py-2 rounded-md`}>{loading ? "Processing..." : "Login"}</button>
+
+            <button type="button" className="w-full px-8 py-2 rounded-md text-white bg-blue-500 flex justify-center items-center gap-2 cursor-pointer" onClick={handleLoginWithGoogle} disabled={loading}>
+                <span className="bi-google" />
+                <span>Login with Google</span>
+            </button>
+
+            <div className="flex justify-start items-start w-full gap-4">
+                <button type="button" className={`cursor-pointer w-full py-2 rounded-md bg-orange-500 text-white`} onClick={() => router.push("/auth/login/turf-owner")}>Login as Turf Owner</button>
+
+                <button type="button" className={`cursor-pointer w-full py-2 rounded-md bg-red-500 text-white`} onClick={() => router.push("/auth/login/admin")}>Login as Admin</button>
+            </div>
+
+            <div className="text-center w-full text-teal-500 sm:text-base text-sm">
+                <Link href={"/auth/register/user"}>Don't have an account. Register here.</Link>
+            </div>
+        </form>
+    );
+}

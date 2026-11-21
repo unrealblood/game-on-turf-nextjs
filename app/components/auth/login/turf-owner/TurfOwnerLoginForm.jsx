@@ -2,14 +2,17 @@
 
 import { createClient } from "@/lib/supabase/client";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
-export default function LoginForm() {
+export default function TurfOwnerLoginForm() {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [status, setStatus] = useState("");
     const [statusMode, setStatusMode] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const router = useRouter();
     
     async function handleSubmit(e) {
         e.preventDefault();
@@ -31,6 +34,7 @@ export default function LoginForm() {
 
         setLoading(true);
 
+        /*
         try {
             const supabase = createClient();
             const { error } = await supabase.auth.signInWithPassword({email, password});
@@ -53,6 +57,7 @@ export default function LoginForm() {
         finally {
             setLoading(false);
         }
+        */
     }
 
     async function handleLoginWithGoogle() {
@@ -91,15 +96,21 @@ export default function LoginForm() {
             </div>
             }
 
-            <button type="submit" className={`cursor-pointer ${loading ? `bg-gray-200 text-black` : `bg-green-500 text-white`} w-full px-8 py-2 rounded-md`}>{loading ? "Processing..." : "Login"}</button>
+            <button type="submit" className={`cursor-pointer ${loading ? `bg-gray-200 text-black` : `bg-orange-500 text-white`} w-full px-8 py-2 rounded-md`}>{loading ? "Processing..." : "Login"}</button>
 
-            <button type="button" className="w-full px-8 py-2 rounded-md border border-blue-500 flex justify-center items-center gap-2 cursor-pointer" onClick={handleLoginWithGoogle} disabled={loading}>
+            <button type="button" className="w-full px-8 py-2 rounded-md text-white bg-blue-500 flex justify-center items-center gap-2 cursor-pointer" onClick={handleLoginWithGoogle} disabled={loading}>
                 <span className="bi-google" />
                 <span>Login with Google</span>
             </button>
 
+            <div className="flex justify-start items-start w-full gap-4">
+                <button type="button" className={`cursor-pointer w-full py-2 rounded-md bg-green-500 text-white`} onClick={() => router.push("/auth/login/user")}>Login as Player</button>
+
+                <button type="button" className={`cursor-pointer w-full py-2 rounded-md bg-red-500 text-white`} onClick={() => router.push("/auth/login/admin")}>Login as Admin</button>
+            </div>
+
             <div className="text-center w-full text-teal-500 sm:text-base text-sm">
-                <Link href={"/auth/register"}>Don't have an account. Register here.</Link>
+                <Link href={"/auth/register/turf-owner"}>Don't have an account. Register here.</Link>
             </div>
         </form>
     );

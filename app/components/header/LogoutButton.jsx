@@ -17,7 +17,7 @@ export default function LogoutButton({setUser}) {
             }
             
             setUser(null);
-            document.location.href = "/auth/login";
+            document.location.href = "/auth/login/user";
         }
         catch(error) {
             throw new Error(error.message);

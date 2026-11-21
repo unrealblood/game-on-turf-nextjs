@@ -43,7 +43,7 @@ export default function HeaderClientComponent() {
                     <LogoutButton setUser={setUser} />
                 </div>
                 :
-                <Link href={"/auth/login"} className="block px-4 py-2 bg-gray-800 text-white rounded-md">Login / Register</Link>
+                <Link href={"/auth/login/user"} className="block px-4 py-2 bg-gray-800 text-white rounded-md">Login / Register</Link>
                 }
             </div>
 
@@ -69,7 +69,7 @@ export default function HeaderClientComponent() {
                             <LogoutButton setUser={setUser} />
                         </div>
                         :
-                        <Link href={"/auth/login"} className="px-4 py-2 bg-gray-800 text-white rounded-md">Login / Register</Link>
+                        <Link href={"/auth/login/user"} className="px-4 py-2 bg-gray-800 text-white rounded-md">Login / Register</Link>
                         }
                     </div>
                 </div>}

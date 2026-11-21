@@ -8,7 +8,7 @@ import { useState } from "react";
 export default function RegisterForm() {
     const [businessName, setBusinessName] = useState("");
     const [email, setEmail] = useState("");
-    const [adress, setAddress] = useState("");
+    const [address, setAddress] = useState("");
     const [city, setCity] = useState("");
     const [state, setState] = useState("");
     const [pincode, setPincode] = useState("");
@@ -52,7 +52,7 @@ export default function RegisterForm() {
             return;
         }
 
-        if(!adress || adress.trim().length === 0) {
+        if(!address || address.trim().length === 0) {
             setStatusMode("error");
             setStatus("Please enter your address");
             return;
@@ -106,12 +106,11 @@ export default function RegisterForm() {
             return;
         }
 
-        /*
         try {
             setLoading(true);
             
             const supabase = createClient();
-            const { error: signupError } = await supabase.auth.signUp({email, password});
+            const { data: accountData, error: signupError } = await supabase.auth.signUp({email, password});
 
             if(signupError) {
                 setStatusMode("error");
@@ -119,16 +118,31 @@ export default function RegisterForm() {
                 return;
             }
             else {
-                const { error: insertError } = await supabase.from("users").insert([{email, phone_number: phoneNumber, name}]);
+                const { data: accountTypesData, error: accountTypesFetchError } = await supabase.from("account_types").select("account_type_id").eq("account_type", "turf_owner");
 
-                if(insertError) {
-                    setStatusMode("error");
-                    setStatus(insertError.message);
-                    return;
+                if(accountTypesFetchError) {
+                    throw new Error("Failed to fetch account_types from supabase. Error: " + accountTypesFetchError.message);
                 }
                 else {
-                    setStatusMode("success");
-                    setStatus("Registration successfull. You may now login.");
+                    const { error: accountsInsertError } = await supabase.from("accounts").insert([{account_id: accountData?.user?.id, account_type_id: accountTypesData[0].account_type_id, email, address, city, state, pincode, country,  contact_number: phoneNumber}]);
+
+                    if(accountsInsertError) {
+                        setStatusMode("error");
+                        setStatus(accountsInsertError.message);
+                        return;
+                    }
+
+                    const { error: usersInsertError } = await supabase.from("turf_owners").insert([{account_id: accountData?.user?.id, business_name: businessName}]);
+
+                    if(usersInsertError) {
+                        setStatusMode("error");
+                        setStatus(usersInsertError.message);
+                        return;
+                    }
+                    else {
+                        setStatusMode("success");
+                        setStatus("Registration successfull. You may now login.");
+                    }
                 }
             }
         }
@@ -139,7 +153,6 @@ export default function RegisterForm() {
         finally {
             setLoading(false);
         }
-        */
     }
 
     return (
@@ -148,7 +161,7 @@ export default function RegisterForm() {
 
             <input type="email" placeholder="Enter your email address" className="border border-gray-200 p-2 rounded-md w-full" value={email} onChange={(e) => setEmail(e.target.value)} />
 
-            <textarea placeholder="Enter your current address" className="w-full border border-gray-200 p-2 rounded-md" value={adress} onChange={(e) => setAddress(e.target.value)}></textarea>
+            <textarea placeholder="Enter your current address" className="w-full border border-gray-200 p-2 rounded-md" value={address} onChange={(e) => setAddress(e.target.value)}></textarea>
 
             <div className="flex justify-start items-start gap-4 w-full">
                 <select value={city} onChange={(e) => setCity(e.target.value)} className="w-full border border-gray-200 p-2 rounded-md">

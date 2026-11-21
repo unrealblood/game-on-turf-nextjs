@@ -1,0 +1,23 @@
+import AdminRegisterForm from "@/app/components/auth/register/admin/AdminRegisterForm.jsx";
+
+export default async function Register() {
+    return (
+        <div className="flex-1 overflow-y-auto mt-16">
+            <div className="sm:w-[600px] w-[280px] mx-auto flex justify-center items-center my-8 border border-gray-200 rounded-md p-4">
+                <div className="w-full">
+                    <header className="flex justify-center items-center gap-4 flex-col mt-4">
+                        <div className="bg-green-200 text-center p-2 rounded-full w-16">
+                            <span className="bi-trophy text-2xl text-teal-500" />
+                        </div>
+
+                        <h1 className="sm:text-2xl text-center text-xl font-bold">Register as Adminstrator</h1>
+                        <p className="text-gray-500 text-center">*Join the league and book grounds easily</p>
+                    </header>
+
+                    {/* Register Form */}
+                    <AdminRegisterForm />
+                </div>
+            </div>
+        </div>
+    );
+}

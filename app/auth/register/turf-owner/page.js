@@ -1,4 +1,4 @@
-import RegisterForm from "@/app/components/auth/register/RegisterForm";
+import TurfOwnerRegisterForm from "@/app/components/auth/register/turf-owner/TurfOwnerRegisterForm.jsx";
 
 export default async function Register() {
     return (
@@ -10,12 +10,12 @@ export default async function Register() {
                             <span className="bi-trophy text-2xl text-teal-500" />
                         </div>
 
-                        <h1 className="sm:text-2xl text-center text-xl font-bold">Register your account</h1>
-                        <p className="text-gray-500 text-center">Join the league and book grounds easily</p>
+                        <h1 className="sm:text-2xl text-center text-xl font-bold">Register as Turf Owner</h1>
+                        <p className="text-gray-500 text-center">*Join the league and book grounds easily</p>
                     </header>
 
                     {/* Register Form */}
-                    <RegisterForm />
+                    <TurfOwnerRegisterForm />
                 </div>
             </div>
         </div>
